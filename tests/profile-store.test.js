@@ -126,7 +126,7 @@ test('refuses to persist a new account when OS encryption is unavailable', (cont
   });
   const pending = store.createPendingProfile();
   fs.writeFileSync(path.join(pending.home, 'auth.json'), JSON.stringify(auth('secure', 'secure@example.com')));
-  assert.throws(() => store.completeProfile(pending.id), /Защищённое хранилище ОС недоступно/);
+  assert.throws(() => store.completeProfile(pending.id), /Protected operating-system storage is unavailable/);
   assert.equal(store.publicProfiles().length, 0);
 });
 

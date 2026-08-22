@@ -12,6 +12,6 @@ test('formats the supported personal ChatGPT plans', () => {
 });
 
 test('keeps an unknown plan minimal and does not invent a subscription', () => {
-  assert.equal(fromPlanType(null), 'Тариф —');
-  assert.equal(fromPlanType('unknown'), 'Тариф —');
+  assert.equal(fromPlanType(null), 'Plan —');
+  assert.equal(fromPlanType('unknown'), 'Plan —');
 });

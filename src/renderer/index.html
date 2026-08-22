@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,43 +12,43 @@
       <header>
         <div>
           <h1>Codex Switcher</h1>
-          <p id="device">Локальный режим · данные аккаунтов не отправляются</p>
+          <p id="device">Local mode · account data is not sent anywhere</p>
         </div>
         <div class="header-actions">
-          <button id="help-open" class="icon-button help-button" title="Инструкции и помощь" aria-label="Открыть инструкции">?</button>
-          <button id="add" class="icon-button" title="Добавить личный аккаунт" aria-label="Добавить личный аккаунт">+</button>
+          <button id="help-open" class="icon-button help-button" title="Instructions and help" aria-label="Open instructions">?</button>
+          <button id="add" class="icon-button" title="Add a personal account" aria-label="Add a personal account">+</button>
         </div>
       </header>
 
       <section id="empty" class="empty hidden">
-        <p>Добавьте свой аккаунт через официальный вход Codex.</p>
-        <button id="empty-add" class="secondary">Добавить аккаунт</button>
+        <p>Add your account through the official Codex sign-in.</p>
+        <button id="empty-add" class="secondary">Add account</button>
       </section>
 
-      <section id="accounts" class="accounts" aria-label="Аккаунты Codex"></section>
+      <section id="accounts" class="accounts" aria-label="Codex accounts"></section>
 
       <section id="auto-switch-row" class="auto-switch-row">
         <div class="auto-switch-copy">
-          <div class="auto-switch-title">Автопереключение</div>
-          <div id="auto-switch-note" class="auto-switch-note">При 1% подключит следующий аккаунт</div>
+          <div class="auto-switch-title">Auto-switch</div>
+          <div id="auto-switch-note" class="auto-switch-note">Connects the next account at 1%</div>
         </div>
-        <label class="switch-control" title="Включить или выключить автопереключение">
-          <input id="auto-switch" type="checkbox" role="switch" aria-label="Автопереключение аккаунтов">
+        <label class="switch-control" title="Enable or disable auto-switch">
+          <input id="auto-switch" type="checkbox" role="switch" aria-label="Automatic account switching">
           <span class="switch-track" aria-hidden="true"></span>
         </label>
       </section>
 
       <section class="actions">
-        <button id="connect" class="primary" disabled>Подключить к Codex</button>
+        <button id="connect" class="primary" disabled>Connect to Codex</button>
         <div class="minor-actions">
-          <button id="refresh" class="link-button" disabled>Обновить лимиты</button>
-          <button id="remove" class="link-button danger" disabled>Убрать</button>
-          <button id="restore" class="link-button hidden">Вернуть удалённый</button>
+          <button id="refresh" class="link-button" disabled>Refresh limits</button>
+          <button id="remove" class="link-button danger" disabled>Remove</button>
+          <button id="restore" class="link-button hidden">Restore removed</button>
         </div>
       </section>
 
       <footer>
-        <span id="status">Выберите аккаунт.</span>
+        <span id="status">Select an account.</span>
         <span id="version"></span>
       </footer>
     </main>
@@ -56,235 +56,235 @@
     <dialog id="help-dialog" class="help-dialog">
       <div class="dialog-head help-head">
         <div>
-          <h2>Инструкции</h2>
-          <p>Короткие ответы по работе с Codex Switcher</p>
+          <h2>Instructions</h2>
+          <p>Short answers about using Codex Switcher</p>
         </div>
         <div class="help-head-actions">
-          <button id="guide-editor-open" class="link-button">Редактировать локально</button>
-          <button id="help-close" class="icon-button close-button" aria-label="Закрыть инструкции">×</button>
+          <button id="guide-editor-open" class="link-button">Edit locally</button>
+          <button id="help-close" class="icon-button close-button" aria-label="Close instructions">×</button>
         </div>
       </div>
 
       <div class="help-sections">
         <details class="help-section" data-guide-id="1" open>
-          <summary><span>1</span>Быстрый старт</summary>
+          <summary><span>1</span>Quick start</summary>
           <div class="help-content">
             <ol>
-              <li>Нажмите <b>+</b> и добавьте личный аккаунт Free, Go, Plus или Pro.</li>
-              <li>Завершите официальный вход OpenAI в браузере.</li>
-              <li>Выберите нужный аккаунт в списке.</li>
-              <li>Нажмите <b>«Подключить к Codex»</b>.</li>
-              <li>Дождитесь зелёной точки и надписи «подключён к Codex».</li>
+              <li>Click <b>+</b> and add a personal Free, Go, Plus, or Pro account.</li>
+              <li>Complete the official OpenAI sign-in in your browser.</li>
+              <li>Select the account you want from the list.</li>
+              <li>Click <b>Connect to Codex</b>.</li>
+              <li>Wait for the green dot and the “connected to Codex” label.</li>
             </ol>
           </div>
         </details>
 
         <details class="help-section" data-guide-id="2">
-          <summary><span>2</span>Как добавить аккаунт</summary>
+          <summary><span>2</span>How to add an account</summary>
           <div class="help-content">
             <ol>
-              <li>Нажмите кнопку <b>+</b> в правом верхнем углу.</li>
-              <li>В открывшемся браузере войдите именно в тот аккаунт, который хотите сохранить.</li>
-              <li>После успешного входа вернитесь в Switcher — аккаунт появится в списке.</li>
-              <li>Выберите его и нажмите <b>«Подключить к Codex»</b>.</li>
+              <li>Click the <b>+</b> button in the upper-right corner.</li>
+              <li>In the browser, sign in to the exact account you want to save.</li>
+              <li>After sign-in succeeds, return to the Switcher. The account will appear in the list.</li>
+              <li>Select it and click <b>Connect to Codex</b>.</li>
             </ol>
-            <p class="help-note">Switcher не запрашивает и не сохраняет ваш пароль или код двухфакторной аутентификации.</p>
+            <p class="help-note">The Switcher never requests or stores your password or two-factor authentication code.</p>
           </div>
         </details>
 
         <details class="help-section" data-guide-id="3">
-          <summary><span>3</span>Как переключить аккаунт</summary>
+          <summary><span>3</span>How to switch accounts</summary>
           <div class="help-content">
             <ol>
-              <li>Один раз нажмите на нужный аккаунт — строка станет выделенной.</li>
-              <li>Нажмите <b>«Подключить к Codex»</b>. Простое выделение строки ещё не меняет аккаунт Codex.</li>
-              <li>Switcher полностью закроет Codex, атомарно заменит локальную авторизацию и снова запустит Codex.</li>
-              <li>Дождитесь сообщения «Аккаунт подключён. Codex запущен».</li>
+              <li>Click the account you want once. Its row becomes selected.</li>
+              <li>Click <b>Connect to Codex</b>. Selecting a row by itself does not change the Codex account.</li>
+              <li>The Switcher fully closes Codex, atomically replaces local authorization, and starts Codex again.</li>
+              <li>Wait for the “Account connected. Codex is running.” message.</li>
             </ol>
-            <p class="help-note">Зелёная точка показывает аккаунт, который сейчас подключён к Codex.</p>
+            <p class="help-note">The green dot marks the account currently connected to Codex.</p>
           </div>
         </details>
 
         <details class="help-section" data-guide-id="4">
-          <summary><span>4</span>Лимиты и дата обновления</summary>
+          <summary><span>4</span>Limits and reset time</summary>
           <div class="help-content">
-            <p>Процент справа показывает оставшийся доступный лимит. Если отображаются два процента, это два разных временных окна использования.</p>
+            <p>The percentage on the right is the remaining available limit. If two percentages are shown, they represent two different usage windows.</p>
             <ul>
-              <li>Зелёный — лимита достаточно.</li>
-              <li>Оранжевый — осталось 50% или меньше.</li>
-              <li>Красный — осталось 20% или меньше.</li>
+              <li>Green — enough capacity remains.</li>
+              <li>Orange — 50% or less remains.</li>
+              <li>Red — 20% or less remains.</li>
             </ul>
-            <p>Под процентом указано, когда основное окно лимита обновится. Для ручной проверки выберите аккаунт и нажмите <b>«Обновить лимиты»</b>.</p>
-            <h3>Автопереключение</h3>
+            <p>The main limit window's reset time appears below the percentage. To check manually, select an account and click <b>Refresh limits</b>.</p>
+            <h3>Auto-switch</h3>
             <ol>
-              <li>Включите тумблер <b>«Автопереключение»</b> на главном экране.</li>
-              <li>Пока Switcher работает, он примерно раз в минуту проверяет активный аккаунт.</li>
-              <li>Когда хотя бы одно окно лимита достигнет 1% или ниже, Switcher по порядку проверит следующие аккаунты и выберет первый с лимитом выше 1%.</li>
-              <li>Codex будет закрыт, аккаунт изменён и Codex запущен снова без дополнительных нажатий.</li>
+              <li>Enable the <b>Auto-switch</b> toggle on the main screen.</li>
+              <li>While the Switcher is running, it checks the active account about once per minute.</li>
+              <li>When either usage window reaches 1% or less, the Switcher checks following accounts in order and chooses the first one with more than 1% available.</li>
+              <li>Codex is closed, the account is changed, and Codex starts again without another click.</li>
             </ol>
-            <p class="help-note">Если доступных аккаунтов нет, текущий аккаунт останется выбранным, а Switcher продолжит проверки. Функцию можно выключить тем же тумблером.</p>
+            <p class="help-note">If no account is available, the current account stays selected and the Switcher keeps checking. Disable the feature with the same toggle.</p>
           </div>
         </details>
 
         <details class="help-section" data-guide-id="5">
-          <summary><span>5</span>Как обновить приложение</summary>
+          <summary><span>5</span>How to update the app</summary>
           <div class="help-content">
             <h3>Windows</h3>
             <ol>
-              <li>Откройте раздел <b>Releases</b> репозитория GitHub и скачайте новую Windows-сборку.</li>
-              <li>Закройте старый Switcher.</li>
-              <li>Распакуйте скачанный ZIP в новую папку и запустите <b>Codex Switcher.exe</b>.</li>
-              <li>После проверки старую папку можно удалить.</li>
+              <li>Open this GitHub repository's <b>Releases</b> page and download the new Windows build.</li>
+              <li>Close the old Switcher.</li>
+              <li>Extract the downloaded ZIP to a new folder and run <b>Codex Switcher Local.exe</b>.</li>
+              <li>After verifying the new version, you may delete the old folder.</li>
             </ol>
             <h3>macOS</h3>
             <ol>
-              <li>Скачайте новый DMG из раздела <b>Releases</b> и закройте Switcher.</li>
-              <li>Откройте DMG и перенесите приложение в папку «Программы» с заменой старой версии.</li>
-              <li>Запустите Codex Switcher снова.</li>
+              <li>Download the new DMG from <b>Releases</b> and close the Switcher.</li>
+              <li>Open the DMG and move the app to <b>Applications</b>, replacing the old version.</li>
+              <li>Start Codex Switcher again.</li>
             </ol>
-            <p class="help-note">Сохранённые аккаунты находятся отдельно от приложения и не удаляются при обычном обновлении.</p>
+            <p class="help-note">Saved accounts are stored separately from the application and are not deleted during a normal update.</p>
           </div>
         </details>
 
         <details class="help-section" data-guide-id="6">
-          <summary><span>6</span>Удаление и восстановление</summary>
+          <summary><span>6</span>Removal and restoration</summary>
           <div class="help-content">
             <ol>
-              <li>Выберите аккаунт и нажмите <b>«Убрать»</b>.</li>
-              <li>Подтвердите действие — аккаунт переместится в локальный архив.</li>
-              <li>Чтобы отменить случайное удаление, нажмите <b>«Вернуть удалённый»</b>.</li>
+              <li>Select an account and click <b>Remove</b>.</li>
+              <li>Confirm the action. The account moves to a local archive.</li>
+              <li>To undo an accidental removal, click <b>Restore removed</b>.</li>
             </ol>
-            <p class="help-note">Это не удаляет аккаунт OpenAI и не отменяет подписку. Восстанавливается последний удалённый локальный профиль.</p>
+            <p class="help-note">This does not delete the OpenAI account or cancel its subscription. The most recently removed local profile is restored.</p>
           </div>
         </details>
 
         <details class="help-section" data-guide-id="7">
-          <summary><span>7</span>Ошибки и решения</summary>
+          <summary><span>7</span>Errors and solutions</summary>
           <div class="help-content error-list">
             <article class="error-card">
-              <h3>Кнопка подключения не работает</h3>
-              <p><b>Решение:</b> выберите строку аккаунта, убедитесь, что вход завершён, перезапустите Switcher и повторите подключение.</p>
+              <h3>The connect button does not work</h3>
+              <p><b>Solution:</b> select an account row, confirm that sign-in completed, restart the Switcher, and try connecting again.</p>
             </article>
             <article class="error-card">
-              <h3>Аккаунт не переключился</h3>
-              <p><b>Решение:</b> после выбора обязательно нажмите «Подключить к Codex» и дождитесь завершения автоматического перезапуска. Если Switcher сообщает, что Codex не удалось закрыть, закройте Codex вручную и повторите подключение.</p>
+              <h3>The account did not switch</h3>
+              <p><b>Solution:</b> after selecting an account, click <b>Connect to Codex</b> and wait for the automatic restart to finish. If the Switcher says it could not close Codex, close Codex manually and try again.</p>
             </article>
             <article class="error-card">
-              <h3>Автопереключение не сработало</h3>
-              <p><b>Решение:</b> убедитесь, что тумблер включён, Switcher остаётся запущенным, добавлено минимум два аккаунта и у следующего аккаунта отображается лимит выше 1%. Нажмите «Обновить лимиты», если вместо процента показан прочерк.</p>
+              <h3>Auto-switch did not run</h3>
+              <p><b>Solution:</b> verify that the toggle is enabled, the Switcher is still running, at least two accounts are saved, and the next account shows more than 1% available. Click <b>Refresh limits</b> if a dash appears instead of a percentage.</p>
             </article>
             <article class="error-card">
-              <h3>Codex вышел из аккаунта</h3>
-              <p><b>Решение:</b> не удаляйте папки данных Switcher и Codex. Выберите сохранённый аккаунт и подключите его повторно. Если авторизация OpenAI истекла, уберите локальный профиль и добавьте аккаунт заново через официальный вход.</p>
+              <h3>Codex signed out</h3>
+              <p><b>Solution:</b> do not delete the Switcher or Codex data directories. Select the saved account and connect it again. If the OpenAI authorization expired, remove the local profile and add the account again through the official sign-in.</p>
             </article>
             <article class="error-card">
-              <h3>Не отображаются лимиты</h3>
-              <p><b>Решение:</b> проверьте интернет, выберите аккаунт и нажмите «Обновить лимиты». Если показан прочерк, подождите несколько минут: OpenAI иногда временно не возвращает данные. Это не мешает подключению аккаунта.</p>
+              <h3>Limits are not displayed</h3>
+              <p><b>Solution:</b> check your internet connection, select the account, and click <b>Refresh limits</b>. If a dash remains, wait a few minutes; OpenAI may temporarily omit limit data. This does not prevent connecting the account.</p>
             </article>
             <article class="error-card">
-              <h3>Не открылось окно авторизации</h3>
-              <p><b>Решение:</b> проверьте браузер по умолчанию и блокировку всплывающих окон, затем снова нажмите <b>+</b>. Если вход уже запущен, перезапустите Switcher и повторите попытку.</p>
+              <h3>The authorization window did not open</h3>
+              <p><b>Solution:</b> check the default browser and pop-up blocking, then click <b>+</b> again. If sign-in is already running, restart the Switcher and retry.</p>
             </article>
             <article class="error-card">
-              <h3>Защищённое хранилище недоступно</h3>
-              <p><b>Решение:</b> разблокируйте сеанс macOS или Windows и перезапустите приложение. Switcher не сохраняет новую авторизацию без доступного Keychain или DPAPI.</p>
+              <h3>Protected storage is unavailable</h3>
+              <p><b>Solution:</b> unlock your macOS or Windows session and restart the app. The Switcher will not save new authorization data without Keychain or DPAPI.</p>
             </article>
             <article class="error-card">
-              <h3>Не найден Codex</h3>
-              <p><b>Решение:</b> соберите приложение штатной командой из README — она загрузит проверенный официальный бинарник Codex. Также установите официальное приложение Codex на компьютер.</p>
+              <h3>Codex was not found</h3>
+              <p><b>Solution:</b> build the app using the standard README command, which downloads a verified official Codex binary. Also install the official Codex application on the computer.</p>
             </article>
             <article class="error-card">
-              <h3>Приложение неожиданно закрылось</h3>
-              <p><b>Решение:</b> откройте Switcher снова и установите последнюю версию из GitHub Releases. Если сбой повторяется, скопируйте диагностику и приложите её к отчёту об ошибке без файлов авторизации.</p>
+              <h3>The app closed unexpectedly</h3>
+              <p><b>Solution:</b> open the Switcher again and install the latest version from GitHub Releases. If the crash repeats, copy diagnostics and attach them to a bug report without authorization files.</p>
             </article>
           </div>
         </details>
 
         <details class="help-section" data-guide-id="8">
-          <summary><span>8</span>Безопасность и приватность</summary>
+          <summary><span>8</span>Security and privacy</summary>
           <div class="help-content">
             <ul>
-              <li>Аккаунты хранятся только локально; приложение не имеет собственного сервера и телеметрии.</li>
-              <li>Сохранённые копии авторизации шифруются через Keychain на macOS или DPAPI на Windows.</li>
-              <li>Сеть используется официальным Codex для входа и получения лимитов непосредственно от OpenAI.</li>
-              <li>Не отправляйте никому пароль, код 2FA, файлы авторизации или папку данных приложения.</li>
+              <li>Accounts are stored only locally; the app has no custom server or telemetry.</li>
+              <li>Saved authorization copies are encrypted through Keychain on macOS or DPAPI on Windows.</li>
+              <li>The official Codex process uses the network to sign in and retrieve limits directly from OpenAI.</li>
+              <li>Never send anyone your password, 2FA code, authorization files, or application data directory.</li>
             </ul>
           </div>
         </details>
 
         <details class="help-section" data-guide-id="9">
-          <summary><span>9</span>Поддержка и диагностика</summary>
+          <summary><span>9</span>Support and diagnostics</summary>
           <div class="help-content">
-            <p>Диагностика содержит только версию приложения, систему и состояние автопереключения. В ней нет адресов аккаунтов, паролей или токенов.</p>
-            <button id="help-copy-diagnostics" class="help-action secondary" data-guide-action>Скопировать диагностику</button>
+            <p>Diagnostics include only the app version, operating system, and auto-switch state. They do not contain account addresses, passwords, or tokens.</p>
+            <button id="help-copy-diagnostics" class="help-action secondary" data-guide-action>Copy diagnostics</button>
           </div>
         </details>
 
         <details class="help-section" data-guide-id="10" data-custom-section="10">
-          <summary><span>10</span>Новый ChatGPT-аккаунт и 2FA</summary>
+          <summary><span>10</span>New ChatGPT account and 2FA</summary>
           <div class="help-content">
-            <h3>Шаг 1. Подготовьте данные</h3>
+            <h3>Step 1. Prepare your information</h3>
             <ul>
-              <li>Используйте почту, к которой у вас есть постоянный доступ.</li>
-              <li>Если регистрируетесь по паролю, придумайте уникальный пароль и сохраните его в менеджере паролей.</li>
-              <li>Заранее установите приложение-аутентификатор: Google Authenticator, Microsoft Authenticator, Authy, 1Password или другое приложение с поддержкой TOTP.</li>
+              <li>Use an email address you can access permanently.</li>
+              <li>If you register with a password, create a unique password and save it in a password manager.</li>
+              <li>Install an authenticator app in advance, such as Google Authenticator, Microsoft Authenticator, Authy, 1Password, or another TOTP-compatible app.</li>
             </ul>
 
-            <h3>Шаг 2. Зарегистрируйте аккаунт ChatGPT</h3>
+            <h3>Step 2. Create a ChatGPT account</h3>
             <ol>
-              <li>Нажмите кнопку ниже или самостоятельно откройте <b>chatgpt.com</b>.</li>
-              <li>Выберите <b>Sign up / Регистрация</b>.</li>
-              <li>Укажите email и создайте пароль либо выберите <b>Продолжить с Google, Microsoft или Apple</b>.</li>
-              <li>Если OpenAI отправит письмо, откройте его и подтвердите адрес электронной почты.</li>
-              <li>Заполните запрошенные данные и примите условия сервиса.</li>
-              <li>После входа убедитесь, что открывается обычный экран ChatGPT.</li>
+              <li>Click the button below or open <b>chatgpt.com</b> yourself.</li>
+              <li>Select <b>Sign up</b>.</li>
+              <li>Enter your email and create a password, or choose <b>Continue with Google, Microsoft, or Apple</b>.</li>
+              <li>If OpenAI sends a message, open it and verify your email address.</li>
+              <li>Complete the requested information and accept the service terms.</li>
+              <li>After signing in, confirm that the normal ChatGPT screen opens.</li>
             </ol>
-            <p class="help-note">Запомните способ регистрации. Если использовали Google, Microsoft или Apple, в дальнейшем выбирайте тот же способ входа.</p>
-            <button id="help-open-chatgpt" class="help-action secondary" data-guide-action>Открыть официальный ChatGPT</button>
+            <p class="help-note">Remember how you registered. If you used Google, Microsoft, or Apple, select the same sign-in method in the future.</p>
+            <button id="help-open-chatgpt" class="help-action secondary" data-guide-action>Open official ChatGPT</button>
 
-            <h3>Шаг 3. Откройте настройки безопасности</h3>
+            <h3>Step 3. Open security settings</h3>
             <ol>
-              <li>В ChatGPT нажмите на значок профиля.</li>
-              <li>Откройте <b>Settings / Настройки</b>.</li>
-              <li>Перейдите в раздел <b>Security / Безопасность</b>.</li>
-              <li>Найдите <b>Multi-factor authentication (MFA)</b> и выберите <b>Authenticator app / Приложение-аутентификатор</b>.</li>
-              <li>Повторно подтвердите вход, если OpenAI попросит это сделать.</li>
-            </ol>
-
-            <h3>Шаг 4. Получите и сохраните секретный ключ 2FA</h3>
-            <ol>
-              <li>OpenAI покажет QR-код для настройки приложения-аутентификатора.</li>
-              <li>Если нужен текстовый ключ, нажмите ссылку вроде <b>«Не удаётся отсканировать?» / «Enter setup key»</b>, если она доступна.</li>
-              <li>Скопируйте показанный секретный ключ TOTP только в защищённую запись менеджера паролей. В некоторых версиях интерфейса доступен только QR-код — тогда просто отсканируйте его.</li>
-              <li>В приложении-аутентификаторе нажмите <b>+</b>, отсканируйте QR-код либо выберите ручной ввод и вставьте ключ.</li>
-              <li>Аутентификатор создаст шестизначный одноразовый код, который меняется примерно каждые 30 секунд.</li>
-            </ol>
-            <p class="help-warning"><b>Никому и ни на каком сайте не вводите QR-код или секретный TOTP-ключ.</b> Храните его только в доверенном приложении-аутентификаторе или менеджере паролей.</p>
-
-            <h3>Шаг 5. Завершите включение 2FA</h3>
-            <ol>
-              <li>Введите текущий шестизначный код из приложения-аутентификатора в окне ChatGPT.</li>
-              <li>Нажмите <b>Подтвердить / Continue</b>.</li>
-              <li>Убедитесь, что Authenticator app отмечен как включённый способ MFA.</li>
-              <li>Если OpenAI покажет резервные коды восстановления, сохраните их отдельной защищённой записью.</li>
-            </ol>
-            <p class="help-note"><b>Резервные коды — не TOTP-ключ.</b> Каждый резервный код предназначен для восстановления доступа, если телефон или аутентификатор потерян.</p>
-
-            <h3>Шаг 6. Проверьте вход</h3>
-            <ol>
-              <li>Не выходя из текущего устройства, откройте приватное окно браузера.</li>
-              <li>Войдите тем же способом, который использовали при регистрации.</li>
-              <li>Когда ChatGPT попросит второй фактор, введите новый код из аутентификатора.</li>
-              <li>После успешной проверки закройте приватное окно.</li>
+              <li>In ChatGPT, click your profile icon.</li>
+              <li>Open <b>Settings</b>.</li>
+              <li>Go to <b>Security</b>.</li>
+              <li>Find <b>Multi-factor authentication (MFA)</b> and select <b>Authenticator app</b>.</li>
+              <li>Confirm your sign-in again if OpenAI asks.</li>
             </ol>
 
-            <h3>Шаг 7. Добавьте аккаунт в Switcher</h3>
+            <h3>Step 4. Obtain and store the 2FA secret</h3>
             <ol>
-              <li>Вернитесь в Codex Switcher и нажмите <b>+</b>.</li>
-              <li>Завершите официальный вход ChatGPT в браузере и введите код 2FA самостоятельно.</li>
-              <li>Вернитесь в Switcher, выберите добавленный аккаунт и нажмите <b>«Подключить к Codex»</b>.</li>
+              <li>OpenAI will show a QR code for configuring an authenticator app.</li>
+              <li>If you need a text key, choose a link such as <b>Can't scan it?</b> or <b>Enter setup key</b>, if available.</li>
+              <li>Copy the displayed TOTP secret only into a protected password-manager entry. Some interface versions show only a QR code; in that case, scan it directly.</li>
+              <li>In the authenticator app, click <b>+</b>, scan the QR code, or choose manual entry and paste the key.</li>
+              <li>The authenticator will generate a six-digit one-time code that changes about every 30 seconds.</li>
             </ol>
-            <p class="help-warning">Не храните пароль, QR-код, TOTP-ключ и резервные коды в заметках без защиты, переписке или скриншотах. Если ключ стал известен другому человеку, отключите этот способ MFA и настройте его заново.</p>
+            <p class="help-warning"><b>Never enter the QR code or TOTP secret on another website or share it with anyone.</b> Store it only in a trusted authenticator or password manager.</p>
+
+            <h3>Step 5. Finish enabling 2FA</h3>
+            <ol>
+              <li>Enter the current six-digit code from your authenticator in the ChatGPT window.</li>
+              <li>Click <b>Confirm</b> or <b>Continue</b>.</li>
+              <li>Verify that Authenticator app is shown as an enabled MFA method.</li>
+              <li>If OpenAI displays recovery codes, save them in a separate protected entry.</li>
+            </ol>
+            <p class="help-note"><b>Recovery codes are not the TOTP secret.</b> Each recovery code is intended to restore access if the phone or authenticator is lost.</p>
+
+            <h3>Step 6. Test sign-in</h3>
+            <ol>
+              <li>Without signing out on your current device, open a private browser window.</li>
+              <li>Sign in using the same method you used during registration.</li>
+              <li>When ChatGPT requests the second factor, enter a new code from the authenticator.</li>
+              <li>After successful verification, close the private window.</li>
+            </ol>
+
+            <h3>Step 7. Add the account to the Switcher</h3>
+            <ol>
+              <li>Return to Codex Switcher and click <b>+</b>.</li>
+              <li>Complete the official ChatGPT sign-in in your browser and enter the 2FA code yourself.</li>
+              <li>Return to the Switcher, select the added account, and click <b>Connect to Codex</b>.</li>
+            </ol>
+            <p class="help-warning">Do not store your password, QR code, TOTP secret, or recovery codes in unprotected notes, messages, or screenshots. If someone else learns the secret, disable that MFA method and configure it again.</p>
           </div>
         </details>
       </div>
@@ -295,44 +295,44 @@
     <dialog id="guide-editor-dialog" class="guide-editor-dialog">
       <div class="dialog-head">
         <div>
-          <h2>Редактор гайдов</h2>
-          <p>Изменения сохраняются только на этом компьютере</p>
+          <h2>Guide editor</h2>
+          <p>Changes are saved only on this computer</p>
         </div>
-        <button id="guide-editor-close" class="icon-button close-button" aria-label="Закрыть редактор">×</button>
+        <button id="guide-editor-close" class="icon-button close-button" aria-label="Close editor">×</button>
       </div>
       <label class="editor-field">
-        <span>Раздел</span>
+        <span>Section</span>
         <select id="guide-editor-section">
-          <option value="1">1 · Быстрый старт</option>
-          <option value="2">2 · Как добавить аккаунт</option>
-          <option value="3">3 · Как переключить аккаунт</option>
-          <option value="4">4 · Лимиты и дата обновления</option>
-          <option value="5">5 · Как обновить приложение</option>
-          <option value="6">6 · Удаление и восстановление</option>
-          <option value="7">7 · Ошибки и решения</option>
-          <option value="8">8 · Безопасность и приватность</option>
-          <option value="9">9 · Поддержка и диагностика</option>
-          <option value="10">10 · Новый ChatGPT-аккаунт и 2FA</option>
+          <option value="1">1 · Quick start</option>
+          <option value="2">2 · How to add an account</option>
+          <option value="3">3 · How to switch accounts</option>
+          <option value="4">4 · Limits and reset time</option>
+          <option value="5">5 · How to update the app</option>
+          <option value="6">6 · Removal and restoration</option>
+          <option value="7">7 · Errors and solutions</option>
+          <option value="8">8 · Security and privacy</option>
+          <option value="9">9 · Support and diagnostics</option>
+          <option value="10">10 · New ChatGPT account and 2FA</option>
         </select>
       </label>
       <label class="editor-field">
-        <span>Название</span>
+        <span>Title</span>
         <input id="guide-editor-title" maxlength="100" autocomplete="off">
       </label>
       <label class="editor-field">
-        <span>Текст гайда</span>
+        <span>Guide content</span>
         <textarea id="guide-editor-content" maxlength="30000" spellcheck="false"></textarea>
       </label>
       <div class="editor-format-help">
-        <code># Заголовок</code><code>1. Шаг</code><code>- Пункт</code><code>&gt; Заметка</code><code>! Предупреждение</code>
+        <code># Heading</code><code>1. Step</code><code>- Item</code><code>&gt; Note</code><code>! Warning</code>
       </div>
-      <p class="help-warning editor-security-note">Не вставляйте сюда пароли, OAuth-токены, QR-коды, TOTP-ключи или recovery-коды. Они не нужны редактору и останутся в локальном файле.</p>
+      <p class="help-warning editor-security-note">Do not paste passwords, OAuth tokens, QR codes, TOTP secrets, or recovery codes here. The editor does not need them, and they would remain in a local file.</p>
       <p id="guide-editor-status" class="guide-editor-status" aria-live="polite"></p>
       <div class="guide-editor-actions">
-        <button id="guide-editor-reset" class="link-button danger">Вернуть встроенный текст</button>
+        <button id="guide-editor-reset" class="link-button danger">Restore built-in text</button>
         <div>
-          <button id="guide-editor-cancel" class="secondary">Отмена</button>
-          <button id="guide-editor-save" class="primary">Сохранить локально</button>
+          <button id="guide-editor-cancel" class="secondary">Cancel</button>
+          <button id="guide-editor-save" class="primary">Save locally</button>
         </div>
       </div>
     </dialog>

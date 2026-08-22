@@ -12,7 +12,7 @@ function validateGuide(sectionId, title, content) {
   const cleanContent = typeof content === 'string' ? content.replace(/\r\n?/g, '\n').trim() : '';
   const hasBadControls = [...cleanTitle + cleanContent].some((character) => character.charCodeAt(0) < 32 && !['\n', '\t'].includes(character));
   if (!validSectionId(sectionId) || !cleanTitle || cleanTitle.length > 100 || !cleanContent || cleanContent.length > 30000 || hasBadControls) {
-    throw new Error('Название или текст гайда имеют неверный формат.');
+    throw new Error('The guide title or content has an invalid format.');
   }
   return { section_id: sectionId, title: cleanTitle, content: cleanContent, updated_at: Math.floor(Date.now() / 1000) };
 }
@@ -42,7 +42,7 @@ class GuideStore {
 
   reset(sectionId) {
     const id = Number(sectionId);
-    if (!validSectionId(id)) throw new Error('Неизвестный раздел гайда.');
+    if (!validSectionId(id)) throw new Error('Unknown guide section.');
     this.state = this.state.filter((guide) => Number(guide.section_id) !== id);
     this.persist();
     return this.guides();

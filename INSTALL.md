@@ -1,32 +1,32 @@
-# Установка Codex Switcher Local
+# Install Codex Switcher Local
 
-Codex Switcher Local — неофициальное локальное приложение сообщества. Оно предназначено только для переключения между собственными аккаунтами Codex.
+Codex Switcher Local is an unofficial local community app intended only for switching between Codex accounts you own.
 
-Готовая версия для macOS и Windows доступна на [официальной странице загрузки](https://shalun.online/codex-switcher/), которая обновляется при выходе новых сборок. GitHub Releases хранит копии релизов и историю версий.
+Ready-to-use macOS and Windows builds are available on the continuously updated [official download page](https://shalun.online/codex-switcher/). GitHub Releases provides release mirrors and version history.
 
 ## macOS
 
-1. Откройте [страницу готовых версий](https://shalun.online/codex-switcher/) или раздел **Releases** на GitHub.
-2. Скачайте `Codex-Switcher-4.6.3-mac-universal.dmg`.
-3. Сверьте SHA-256 файла со значением из `SHA256SUMS.txt` в том же релизе.
-4. Откройте DMG и перенесите приложение в папку «Программы».
-5. Запустите Codex Switcher Local и добавьте аккаунт через официальный браузерный вход OpenAI.
+1. Open the [ready-to-use download page](https://shalun.online/codex-switcher/) or **Releases** on GitHub.
+2. Download `Codex-Switcher-4.6.3-mac-universal.dmg`.
+3. Compare its SHA-256 digest with `SHA256SUMS.txt` in the same release.
+4. Open the DMG and drag the app to **Applications**.
+5. Start Codex Switcher Local and add an account through the official OpenAI browser sign-in.
 
-Сборка universal подходит для Apple Silicon и Intel. Текущая тестовая сборка не подписана Apple Developer ID, поэтому macOS может показать предупреждение. Не отключайте Gatekeeper целиком: для максимальной безопасности соберите приложение из проверенных исходников или дождитесь подписанного релиза.
+The universal build supports Apple Silicon and Intel. The current test build is not signed with an Apple Developer ID, so macOS may display a warning. Do not disable Gatekeeper globally. For maximum assurance, build the app from reviewed source or wait for a signed release.
 
 ## Windows 10/11 x64
 
-1. Откройте [страницу готовых версий](https://shalun.online/codex-switcher/) или раздел **Releases** на GitHub.
-2. Скачайте `Codex-Switcher-4.6.3-win-x64.zip`.
-3. Сверьте SHA-256 файла со значением из `SHA256SUMS.txt` в том же релизе.
-4. Распакуйте ZIP в отдельную папку.
-5. Запустите `Codex Switcher Local.exe`.
+1. Open the [ready-to-use download page](https://shalun.online/codex-switcher/) or **Releases** on GitHub.
+2. Download `Codex-Switcher-4.6.3-win-x64.zip`.
+3. Compare its SHA-256 digest with `SHA256SUMS.txt` in the same release.
+4. Extract the ZIP into its own folder.
+5. Run `Codex Switcher Local.exe`.
 
-Текущая тестовая сборка не подписана сертификатом Windows Code Signing, поэтому SmartScreen может показать предупреждение. Не отключайте Microsoft Defender: для максимальной безопасности соберите приложение из исходников или дождитесь подписанного релиза.
+The current test build is not signed with a Windows code-signing certificate, so SmartScreen may display a warning. Do not disable Microsoft Defender. For maximum assurance, build the app from source or wait for a signed release.
 
-## Запуск из исходников
+## Run from source
 
-Установите Node.js 22+, Corepack, pnpm 11 и Git, затем выполните:
+Install Node.js 22+, Corepack, pnpm 11, and Git, then run:
 
 ```bash
 corepack enable
@@ -36,4 +36,4 @@ pnpm run check
 pnpm start
 ```
 
-Пароль и код двухфакторной аутентификации вводятся только на официальной странице OpenAI. Никогда не отправляйте другим людям `auth.json`, содержимое папки данных приложения, OAuth-токены, QR-коды или секрет 2FA.
+Enter your password and two-factor authentication code only on the official OpenAI page. Never share `auth.json`, the app data directory, OAuth tokens, QR codes, or your 2FA secret.

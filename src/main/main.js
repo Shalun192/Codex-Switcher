@@ -67,7 +67,7 @@ function isAllowedOpenAIUrl(value) {
 }
 
 async function openOpenAIUrl(value) {
-  if (!isAllowedOpenAIUrl(value)) throw new Error('Codex вернул недоверенный адрес входа. Операция остановлена.');
+  if (!isAllowedOpenAIUrl(value)) throw new Error('Codex returned an untrusted sign-in URL. The operation was stopped.');
   return shell.openExternal(new URL(value).toString());
 }
 
@@ -98,7 +98,7 @@ async function refreshMetrics(profileId) {
 async function withAccountOperation(operation, options = {}) {
   if (accountOperationPromise) {
     if (options.skipIfBusy) return null;
-    throw new Error('Дождитесь завершения текущей операции с аккаунтом.');
+    throw new Error('Wait for the current account operation to finish.');
   }
   const running = Promise.resolve().then(operation);
   accountOperationPromise = running;
@@ -111,22 +111,22 @@ async function withAccountOperation(operation, options = {}) {
 
 async function activateAndLaunchCodex(id, automatic = false) {
   const profile = profiles.state.profiles.find((item) => item.id === id);
-  if (!profile) throw new Error('Аккаунт не найден.');
+  if (!profile) throw new Error('Account not found.');
   sendStatus(automatic
-    ? `Лимит закончился. Закрываю Codex и переключаюсь на ${profile.email}…`
-    : 'Закрываю Codex перед сменой аккаунта…');
+    ? `The limit is exhausted. Closing Codex and switching to ${profile.email}…`
+    : 'Closing Codex before switching accounts…');
   const launch = await switchAccountSafely({
     lifecycle: codexLifecycle,
     activate: () => {
       if (automatic && !profiles.publicSettings().autoSwitchEnabled) {
-        throw new Error('Автопереключение было выключено. Аккаунт не изменён.');
+        throw new Error('Auto-switch was disabled. The account was not changed.');
       }
       profiles.activate(id);
     }
   });
   sendStatus(automatic
-    ? (launch.restarted ? `Автоматически подключён ${profile.email}. Codex запущен.` : `Автоматически подключён ${profile.email}. ${launch.reason}`)
-    : (launch.restarted ? 'Аккаунт подключён. Codex запущен.' : launch.reason));
+    ? (launch.restarted ? `Automatically connected ${profile.email}. Codex is running.` : `Automatically connected ${profile.email}. ${launch.reason}`)
+    : (launch.restarted ? 'Account connected. Codex is running.' : launch.reason));
   return launch;
 }
 
@@ -153,12 +153,12 @@ async function bootstrap() {
 }
 
 async function addAccount() {
-  if (loginClient) throw new Error('Вход в другой аккаунт уже выполняется.');
+  if (loginClient) throw new Error('Another account sign-in is already in progress.');
   const pending = profiles.createPendingProfile();
   pendingLoginId = pending.id;
   const binary = resolveCodexBinary(process.resourcesPath, app.getAppPath());
   loginClient = new CodexClient(binary, pending.home);
-  sendStatus('Откроется официальный вход Codex…');
+  sendStatus('Opening the official Codex sign-in…');
   let completed = false;
   try {
     await loginClient.login(openOpenAIUrl);
@@ -168,7 +168,7 @@ async function addAccount() {
     loginClient = null;
     const profile = profiles.completeProfile(pending.id, account?.email, metrics);
     completed = true;
-    sendStatus('Аккаунт добавлен. Выберите его и нажмите «Подключить».');
+    sendStatus('Account added. Select it and click Connect.');
     return snapshot();
   } finally {
     loginClient?.stop();
@@ -179,9 +179,9 @@ async function addAccount() {
 }
 
 async function connectAccount(id) {
-  if (!profiles.state.profiles.some((profile) => profile.id === id)) throw new Error('Аккаунт не найден.');
+  if (!profiles.state.profiles.some((profile) => profile.id === id)) throw new Error('Account not found.');
   profiles.select(id);
-  sendStatus('Проверяю лимиты и подключаю аккаунт…');
+  sendStatus('Checking limits and connecting the account…');
   try { await refreshMetrics(id); } catch {}
   await activateAndLaunchCodex(id, false);
   return snapshot();
@@ -209,20 +209,20 @@ async function autoSwitchTick() {
             return metrics;
           },
           isEnabled: () => profiles.publicSettings().autoSwitchEnabled,
-          onExhausted: () => sendStatus(`У ${active.email} закончился лимит. Ищу следующий аккаунт…`),
+          onExhausted: () => sendStatus(`${active.email} has exhausted its limit. Looking for the next account…`),
           switchAccount: (id) => activateAndLaunchCodex(id, true)
         });
         if (result.action === 'no-available-account') {
-          autoSwitchRuntime.lastError = 'Лимиты закончились, но другого доступного аккаунта не найдено.';
+          autoSwitchRuntime.lastError = 'The limits are exhausted and no other available account was found.';
           sendStatus(autoSwitchRuntime.lastError);
         }
         if (result.action === 'switched') autoSwitchRuntime.lastSwitchAt = new Date().toISOString();
         return result;
       } catch (error) {
         autoSwitchRuntime.lastError = error.autoSwitchStage === 'current-metrics'
-          ? `Не удалось проверить лимит ${active.email}: ${error.message}`
+          ? `Could not check the limit for ${active.email}: ${error.message}`
           : error.message;
-        sendStatus(`Автопереключение: ${error.message}`);
+        sendStatus(`Auto-switch: ${error.message}`);
         return { action: 'error', error };
       } finally {
         autoSwitchRuntime.lastCheckedAt = new Date().toISOString();
@@ -241,7 +241,7 @@ function trustedSender(event) {
 
 function handle(channel, action) {
   ipcMain.handle(channel, (event, ...args) => {
-    if (!trustedSender(event)) throw new Error('Запрос отклонён: недоверенный источник.');
+    if (!trustedSender(event)) throw new Error('Request rejected: untrusted source.');
     return action(...args);
   });
 }
@@ -259,22 +259,22 @@ function registerIPC() {
   handle('accounts:connect', (id) => withAccountOperation(() => connectAccount(id)));
   handle('accounts:refresh', (id) => withAccountOperation(async () => {
     profiles.select(id);
-    sendStatus('Обновляю лимиты выбранного аккаунта…');
+    sendStatus('Refreshing limits for the selected account…');
     await refreshMetrics(id);
-    sendStatus('Лимиты обновлены.');
+    sendStatus('Limits refreshed.');
     return snapshot();
   }));
   handle('accounts:remove', (id) => withAccountOperation(async () => {
     const profile = profiles.state.profiles.find((item) => item.id === id);
-    if (!profile) throw new Error('Аккаунт не найден.');
+    if (!profile) throw new Error('Account not found.');
     const result = await dialog.showMessageBox(window, {
       type: 'warning',
-      buttons: ['Отмена', 'Убрать аккаунт'],
+      buttons: ['Cancel', 'Remove account'],
       defaultId: 0,
       cancelId: 0,
-      title: 'Убрать аккаунт?',
+      title: 'Remove account?',
       message: profile.email,
-      detail: 'Зашифрованный профиль будет перемещён в локальный архив и останется доступен для восстановления.'
+      detail: 'The encrypted profile will be moved to a local archive and remain available for restoration.'
     });
     if (result.response === 1) profiles.remove(id);
     return snapshot();
@@ -284,8 +284,8 @@ function registerIPC() {
     profiles.setAutoSwitchEnabled(enabled === true);
     autoSwitchRuntime.lastError = null;
     sendStatus(enabled === true
-      ? 'Автопереключение включено. Проверяю активный аккаунт раз в минуту.'
-      : 'Автопереключение выключено.');
+      ? 'Auto-switch is enabled. The active account will be checked once per minute.'
+      : 'Auto-switch is disabled.');
     const current = snapshot();
     if (enabled === true) setTimeout(() => autoSwitchTick().catch(() => {}), 100);
     return current;
@@ -377,7 +377,7 @@ function createWindow() {
     if (template.length > 0) Menu.buildFromTemplate(template).popup({ window });
   });
   window.loadURL(RENDERER_URL).catch((error) => {
-    dialog.showErrorBox('Codex Switcher', `Не удалось открыть локальный интерфейс: ${error.message}`);
+    dialog.showErrorBox('Codex Switcher', `Could not open the local interface: ${error.message}`);
   });
 }
 

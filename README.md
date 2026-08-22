@@ -1,70 +1,70 @@
 # Codex Switcher Local
 
-Минималистичное open-source приложение для локального переключения между собственными аккаунтами Codex на macOS и Windows.
+A minimalist open-source desktop app for switching between your own Codex accounts on macOS and Windows.
 
-> Неофициальный проект сообщества. Он не связан с OpenAI и не одобрен OpenAI. Используйте только собственные аккаунты и соблюдайте правила сервисов OpenAI.
+> Unofficial community project. It is not affiliated with or endorsed by OpenAI. Use only accounts you own and follow the OpenAI service terms.
 
 [![CI](https://github.com/Shalun192/Codex-Switcher/actions/workflows/ci.yml/badge.svg)](https://github.com/Shalun192/Codex-Switcher/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Platforms](https://img.shields.io/badge/platforms-macOS%20%7C%20Windows-lightgrey.svg)](INSTALL.md)
 
-**Не хотите собирать проект самостоятельно?** Скачайте готовую версию для macOS или Windows на [официальной странице Codex Switcher](https://shalun.online/codex-switcher/). Страница загрузки постоянно обновляется по мере выхода новых готовых версий.
+**Do not want to build it yourself?** Download the ready-to-use macOS or Windows version from the [official Codex Switcher download page](https://shalun.online/codex-switcher/). The page is kept up to date whenever a new build is released.
 
-## Скачать
+## Download
 
-Самый простой вариант — скачать постоянно обновляемую готовую версию на [официальном сайте](https://shalun.online/codex-switcher/). Копии релизов и история версий также находятся в [GitHub Releases](https://github.com/Shalun192/Codex-Switcher/releases/latest):
+The easiest option is the continuously updated build on the [official website](https://shalun.online/codex-switcher/). Release mirrors and version history are also available in [GitHub Releases](https://github.com/Shalun192/Codex-Switcher/releases/latest):
 
-| Система | Файл | Поддержка |
+| System | File | Support |
 | --- | --- | --- |
-| macOS | `Codex-Switcher-4.6.3-mac-universal.dmg` | macOS 12+, Apple Silicon и Intel |
+| macOS | `Codex-Switcher-4.6.3-mac-universal.dmg` | macOS 12+, Apple Silicon and Intel |
 | Windows | `Codex-Switcher-4.6.3-win-x64.zip` | Windows 10/11 x64 |
 
-Перед установкой прочитайте [INSTALL.md](INSTALL.md) и сверьте SHA-256 скачанного файла с `SHA256SUMS.txt` из релиза.
+Before installing, read [INSTALL.md](INSTALL.md) and compare the downloaded file's SHA-256 digest with `SHA256SUMS.txt` from the release.
 
-## Почему Codex Switcher Local
+## Why Codex Switcher Local
 
-- **Одно понятное действие.** Выберите аккаунт и нажмите «Подключить к Codex».
-- **Полностью локальная архитектура.** Нет собственного сервера, регистрации устройства, аналитики или удалённого управления.
-- **Зашифрованные сохранённые профили.** Используются Keychain на macOS и DPAPI на Windows.
-- **Лимиты перед глазами.** Рядом с аккаунтом видны оставшиеся проценты, тариф и время обновления.
-- **Автопереключение при 1%.** Switcher может найти следующий аккаунт с доступным лимитом, безопасно закрыть Codex, переключить авторизацию и запустить его снова.
-- **Обратимое удаление.** Случайно убранный локальный профиль можно восстановить.
-- **Проверяемый код.** Исходники, модель угроз, политика приватности и автоматические тесты открыты.
+- **One clear action.** Select an account and click **Connect to Codex**.
+- **Fully local architecture.** No custom server, device registration, analytics, or remote administration.
+- **Encrypted saved profiles.** Uses Keychain on macOS and DPAPI on Windows.
+- **Limits at a glance.** Each account shows remaining percentages, plan, and reset time.
+- **Auto-switch at 1%.** The Switcher can find the next account with available capacity, safely close Codex, replace the local authorization, and start Codex again.
+- **Reversible removal.** A locally removed profile can be restored.
+- **Auditable code.** Source, threat model, privacy policy, and automated tests are public.
 
-Главная изюминка проекта — сочетание максимально простого интерфейса с локальной моделью хранения. Пользователю не нужно передавать разработчику пароли, 2FA или токены и не нужно доверять стороннему backend-серверу.
+The project's key advantage is its very simple interface combined with local-only storage. You never need to give the developer your password, 2FA secret, or tokens, and you do not need to trust a third-party backend.
 
-## Возможности
+## Features
 
-- Добавление аккаунтов через официальный браузерный вход Codex.
-- Явное подключение выбранного аккаунта к локальному Codex.
-- Проценты лимитов, дата обновления и тариф `Free`, `Go`, `Plus` или `Pro`.
-- Автоматическое переключение на следующий доступный аккаунт при 1%.
-- Безопасный порядок переключения: закрыть Codex → атомарно заменить авторизацию → снова запустить Codex.
-- Обратимое локальное удаление аккаунта.
-- Десять встроенных инструкций с локальным редактором.
-- Один исходный код для macOS 12+ и Windows 10/11 x64.
+- Add accounts through the official Codex browser sign-in.
+- Explicitly connect the selected account to the local Codex installation.
+- Display limit percentages, reset time, and the `Free`, `Go`, `Plus`, or `Pro` plan.
+- Automatically switch to the next available account at 1%.
+- Safe switch order: close Codex → atomically replace authorization → start Codex again.
+- Reversible local account removal.
+- Ten built-in guides with a local editor.
+- One source tree for macOS 12+ and Windows 10/11 x64.
 
-Поддерживаются личные планы, которые Codex сообщает как `Free`, `Go`, `Plus` или `Pro`. Приложение не предоставляет подписку и не обходит ограничения OpenAI — оно лишь помогает управлять собственными локальными авторизациями.
+The app supports the personal plans that Codex reports as `Free`, `Go`, `Plus`, or `Pro`. It does not provide a subscription or bypass OpenAI limits; it only helps manage your own local authorizations.
 
-## Приватность
+## Privacy
 
-У приложения нет собственного backend-сервера, удалённого администрирования, аналитики или телеметрии. Список аккаунтов и сохранённые авторизации не отправляются разработчику.
+The app has no custom backend, remote administration, analytics, or telemetry. Account lists and saved authorizations are never sent to the developer.
 
-Сохранённые профили шифруются средствами ОС:
+Saved profiles are encrypted using operating-system facilities:
 
-- macOS — Keychain через Electron `safeStorage`;
-- Windows — DPAPI через Electron `safeStorage`.
+- macOS — Keychain through Electron `safeStorage`;
+- Windows — DPAPI through Electron `safeStorage`.
 
-Для работы Codex требуется интернет: официальный бинарник Codex обращается к OpenAI для входа и получения лимитов. При переключении активная авторизация записывается в стандартный локальный файл Codex `~/.codex/auth.json`; это необходимо для совместимости с Codex. Временная расшифрованная копия создаётся с закрытыми правами только на время запроса и удаляется после операции или при следующем запуске.
+Codex itself requires internet access: the official Codex binary communicates with OpenAI for sign-in and usage-limit data. When you switch accounts, the active authorization is written to Codex's standard local file at `~/.codex/auth.json`; this is required for compatibility. A temporary decrypted copy is created with restrictive permissions only for the duration of an app-server request and is deleted after the operation or on the next launch.
 
-Подробности: [PRIVACY.md](PRIVACY.md) и [THREAT_MODEL.md](THREAT_MODEL.md).
+See [PRIVACY.md](PRIVACY.md) and [THREAT_MODEL.md](THREAT_MODEL.md) for details.
 
-## Запуск из исходников
+## Run from source
 
-Нужно установить:
+Install:
 
-- Node.js 22 или новее;
-- Corepack и pnpm 11;
+- Node.js 22 or later;
+- Corepack and pnpm 11;
 - Git.
 
 ```bash
@@ -75,11 +75,11 @@ pnpm run check
 pnpm start
 ```
 
-`prepare:codex` загружает платформенные пакеты из официального npm-пакета `@openai/codex`, проверяет npm integrity SHA-512 архива и закреплённый SHA-256 извлечённого бинарника. Бинарники и сборки не хранятся в Git.
+`prepare:codex` downloads platform packages from the official `@openai/codex` npm package, verifies the archive's npm SHA-512 integrity and the pinned SHA-256 of the extracted binary. Binaries and builds are not stored in Git.
 
-Официальная документация OpenAI описывает браузерный вход ChatGPT как стандартный способ локальной авторизации Codex: <https://learn.chatgpt.com/docs/auth>.
+OpenAI documentation describes ChatGPT browser sign-in as the standard local authentication method for Codex: <https://learn.chatgpt.com/docs/auth>.
 
-## Сборка
+## Build
 
 macOS universal DMG/ZIP:
 
@@ -99,22 +99,22 @@ Windows x64 installer:
 pnpm run build:win:installer
 ```
 
-Для публичного распространения подпишите приложение сертификатами Apple Developer ID и Windows code signing. Неподписанная сборка работает, но Gatekeeper или SmartScreen покажет предупреждение.
+For public distribution, sign the app with Apple Developer ID and Windows code-signing certificates. Unsigned builds work, but Gatekeeper or SmartScreen may display a warning.
 
-## Проверки перед публикацией
+## Checks before publishing
 
 ```bash
 pnpm run check
 pnpm audit --audit-level high
 ```
 
-В репозитории настроены CI, Dependabot, проверка распространённых секретов, Electron sandbox/context isolation/CSP, проверка источника IPC, запрет разрешений и навигации, собственный локальный протокол и production fuses.
+The repository includes CI, Dependabot, common-secret detection, Electron sandbox/context isolation/CSP, IPC source validation, permission and navigation blocking, a custom local protocol, and production Electron fuses.
 
-## Публикация на GitHub
+## Publishing to GitHub
 
-Публикуйте только содержимое этой папки. `node_modules`, `vendor`, `dist`, файлы авторизации, локальные профили, сертификаты и `.env` уже исключены через `.gitignore`.
+Publish only the contents of this project folder. `node_modules`, `vendor`, `dist`, authorization files, local profiles, certificates, and `.env` files are excluded by `.gitignore`.
 
-Перед первым коммитом включите в GitHub настройку **Keep my email addresses private** и используйте выданный GitHub no-reply адрес для Git — иначе личный email может попасть в историю коммитов. Затем проверьте список и создайте первый коммит:
+Before the first commit, enable **Keep my email addresses private** on GitHub and configure Git with your GitHub no-reply address. Otherwise, a personal email address can become part of the public commit history. Then review the file list and create the commit:
 
 ```bash
 git status --short --ignored
@@ -124,15 +124,15 @@ git remote add origin https://github.com/OWNER/REPOSITORY.git
 git push -u origin main
 ```
 
-GitHub рекомендует закреплять Actions полным SHA коммита; workflow-файлы уже используют такие неизменяемые ссылки. Не добавляйте файлы принудительно через `git add -f`.
+GitHub recommends pinning Actions to full commit SHAs; the included workflow files already use immutable references. Do not force-add ignored files with `git add -f`.
 
-## Важные ограничения
+## Important limitations
 
-- Приложение управляет локальной авторизацией Codex и поэтому является чувствительным к безопасности ПО.
-- Шифрование не защищает от вредоносной программы, уже запущенной под учётной записью пользователя.
-- Автопереключение работает только пока Switcher запущен.
-- API, используемые для чтения лимитов из Codex app-server, могут измениться в будущих версиях Codex.
+- The app manages local Codex authorization and is therefore security-sensitive software.
+- Encryption cannot protect against malware already running as the current user.
+- Auto-switching works only while the Switcher is running.
+- APIs used to read limits from the Codex app server may change in future Codex versions.
 
-## Лицензия
+## License
 
-Код Switcher распространяется по лицензии MIT. Загружаемый при сборке официальный Codex имеет отдельную лицензию Apache-2.0; см. [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Switcher code is licensed under MIT. The official Codex package downloaded during the build has a separate Apache-2.0 license; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

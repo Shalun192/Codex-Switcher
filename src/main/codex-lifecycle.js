@@ -80,7 +80,7 @@ class CodexLifecycle {
       if (!await this.waitForMacState(false, 10000)) {
         try { await this.exec('/usr/bin/pkill', ['-TERM', '-x', 'Codex'], { timeout: 5000 }); } catch {}
         if (!await this.waitForMacState(false, 4000)) {
-          throw new Error('Не удалось полностью закрыть Codex. Аккаунт не изменён.');
+          throw new Error('Codex could not be closed completely. The account was not changed.');
         }
       }
       return { wasRunning: true };
@@ -92,11 +92,11 @@ class CodexLifecycle {
           windowsHide: true
         });
       } catch {
-        throw new Error('Не удалось полностью закрыть Codex. Аккаунт не изменён.');
+        throw new Error('Codex could not be closed completely. The account was not changed.');
       }
       return { wasRunning: true };
     }
-    throw new Error('Автоматический перезапуск поддерживается только на macOS и Windows.');
+    throw new Error('Automatic restart is supported only on macOS and Windows.');
   }
 
   async start() {
@@ -104,10 +104,10 @@ class CodexLifecycle {
     if (this.platform === 'darwin') {
       try {
         await this.exec('/usr/bin/open', ['-b', MAC_BUNDLE_ID], { timeout: 10000 });
-        if (!await this.waitForMacState(true, 10000)) throw new Error('Codex не появился среди запущенных приложений.');
+        if (!await this.waitForMacState(true, 10000)) throw new Error('Codex did not appear among running applications.');
         return { restarted: true };
       } catch {
-        return { restarted: false, reason: 'Аккаунт изменён, но Codex не запустился. Откройте Codex вручную.' };
+        return { restarted: false, reason: 'The account changed, but Codex did not start. Open Codex manually.' };
       }
     }
     if (this.platform === 'win32') {
@@ -118,10 +118,10 @@ class CodexLifecycle {
         });
         return { restarted: true };
       } catch {
-        return { restarted: false, reason: 'Аккаунт изменён, но Codex не запустился. Откройте Codex вручную.' };
+        return { restarted: false, reason: 'The account changed, but Codex did not start. Open Codex manually.' };
       }
     }
-    return { restarted: false, reason: 'Аккаунт изменён. Перезапустите Codex вручную.' };
+    return { restarted: false, reason: 'The account changed. Restart Codex manually.' };
   }
 }
 

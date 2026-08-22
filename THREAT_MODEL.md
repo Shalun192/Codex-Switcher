@@ -1,37 +1,37 @@
 # Threat model
 
-## Защищаемые данные
+## Protected data
 
-- OAuth refresh/access tokens и API-ключи Codex;
-- идентификаторы и email локальных аккаунтов;
-- целостность файла активной авторизации Codex;
-- целостность упакованного приложения.
+- Codex OAuth refresh/access tokens and API keys;
+- local account identifiers and email addresses;
+- integrity of the active Codex authorization file;
+- integrity of the packaged application.
 
-## Границы доверия
+## Trust boundaries
 
-- Главный процесс Electron имеет доступ к файлам и запуску Codex.
-- Renderer показывает только локальные статические файлы и работает в sandbox без Node.js.
-- Preload раскрывает узкий список методов IPC без прямого доступа к `ipcRenderer`.
-- Бинарник Codex загружается из официального npm-пакета и проверяется по registry integrity.
-- Системный браузер выполняет официальный вход OpenAI.
+- The Electron main process can access files and launch Codex.
+- The renderer displays only local static files and runs in a sandbox without Node.js.
+- The preload exposes a narrow IPC method list without direct `ipcRenderer` access.
+- The Codex binary is downloaded from the official npm package and verified against registry integrity metadata.
+- The system browser performs the official OpenAI sign-in.
 
-## Основные меры защиты
+## Primary protections
 
-- `contextIsolation: true`, `nodeIntegration: false`, `sandbox: true`, строгая CSP.
-- Собственный `app://` протокол вместо привилегированного `file://`.
-- Запрет навигации, новых окон, webview и всех разрешений renderer.
-- Проверка источника каждого привилегированного IPC-запроса.
-- `shell.openExternal` разрешён только для HTTPS на `openai.com` и `chatgpt.com`.
-- Атомарная запись файлов и права `0700/0600` на POSIX-системах.
-- Keychain/DPAPI для сохранённых профилей; plaintext используется только для активного Codex и временного app-server сеанса.
-- Electron fuses отключают RunAsNode, `NODE_OPTIONS` и CLI inspector, включают ASAR integrity и загрузку только из ASAR.
-- Автоматическое переключение не меняет авторизацию, пока Codex не закрыт полностью.
+- `contextIsolation: true`, `nodeIntegration: false`, `sandbox: true`, and a strict CSP.
+- A custom `app://` protocol instead of privileged `file://` loading.
+- Renderer navigation, new windows, webviews, and all permission requests are blocked.
+- Every privileged IPC request has its source validated.
+- `shell.openExternal` permits only HTTPS URLs on `openai.com` and `chatgpt.com`.
+- Atomic file writes and `0700/0600` permissions on POSIX systems.
+- Keychain/DPAPI for saved profiles; plaintext exists only for active Codex and a temporary app-server session.
+- Electron fuses disable RunAsNode, `NODE_OPTIONS`, and the CLI inspector while enabling ASAR integrity and ASAR-only loading.
+- Auto-switching does not replace authorization until Codex has fully closed.
 
-## Не входит в модель защиты
+## Out of scope
 
-- вредоносное ПО, уже выполняющееся с правами текущего пользователя;
-- компрометация ОС, Keychain/DPAPI, официального клиента Codex или аккаунта OpenAI;
-- физический доступ к разблокированному компьютеру;
-- модификация неподписанной сборки до её установки.
+- malware already running with the current user's permissions;
+- compromise of the operating system, Keychain/DPAPI, the official Codex client, or the OpenAI account;
+- physical access to an unlocked computer;
+- modification of an unsigned build before installation.
 
-Для распространения обязательно рекомендуется подпись и нотариализация macOS-сборки и подпись Windows-сборки.
+Signing and notarizing the macOS build and signing the Windows build are strongly recommended before broad distribution.

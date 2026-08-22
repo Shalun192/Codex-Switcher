@@ -16,7 +16,7 @@
     const normalized = typeof value === 'string'
       ? value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '')
       : '';
-    return labels.get(normalized) || 'Тариф —';
+    return labels.get(normalized) || 'Plan —';
   }
 
   const api = { fromPlanType };
