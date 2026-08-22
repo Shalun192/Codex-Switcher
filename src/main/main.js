@@ -13,6 +13,7 @@ const { switchAccountSafely } = require('./account-switch');
 const { diagnosticsText } = require('./support');
 const { applicationMenuTemplate, contextMenuTemplate } = require('./edit-menu');
 const { translate, localizeError } = require('./localization');
+const { resolveDataRoot } = require('./data-root');
 
 const BUILD_NUMBER = 463;
 const AUTO_SWITCH_INTERVAL_MS = 60 * 1000;
@@ -411,7 +412,7 @@ app.whenReady().then(() => {
   session.defaultSession.setPermissionRequestHandler((_webContents, _permission, callback) => callback(false));
   session.defaultSession.setPermissionCheckHandler(() => false);
   session.defaultSession.setSpellCheckerEnabled(false);
-  const dataRoot = process.env.CODEX_SWITCHER_DATA_ROOT || app.getPath('userData');
+  const dataRoot = resolveDataRoot(app);
   profiles = new ProfileStore(dataRoot, { safeStorage });
   if (process.platform === 'darwin') Menu.setApplicationMenu(Menu.buildFromTemplate(applicationMenuTemplate(process.platform, currentLanguage())));
   else Menu.setApplicationMenu(null);
