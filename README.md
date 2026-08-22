@@ -8,6 +8,12 @@ A minimalist open-source desktop app for switching between your own Codex accoun
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Platforms](https://img.shields.io/badge/platforms-macOS%20%7C%20Windows-lightgrey.svg)](INSTALL.md)
 
+## Latest announcement — version 4.6.3
+
+Version **4.6.3** is available for macOS and Windows. English is now the default language, the compact **EN/RU** selector translates the complete interface and all ten guides, and existing local accounts are preserved during an update. The release also includes limit percentages, plan and reset-time labels, and optional automatic switching at 1% remaining.
+
+Download the current ready-to-use builds from the [official Codex Switcher download page](https://shalun.online/codex-switcher/) or use the mirror in [GitHub Releases](https://github.com/Shalun192/Codex-Switcher/releases/tag/v4.6.3).
+
 **Do not want to build it yourself?** Download the ready-to-use macOS or Windows version from the [official Codex Switcher download page](https://shalun.online/codex-switcher/). The page is kept up to date whenever a new build is released.
 
 ## Download
