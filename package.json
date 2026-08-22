@@ -1,6 +1,6 @@
 {
   "name": "codex-switcher-local",
-  "version": "4.6.3",
+  "version": "4.6.4",
   "description": "Local-only Codex account switcher for macOS and Windows",
   "main": "src/main/main.js",
   "author": "Codex Switcher",
@@ -24,7 +24,7 @@
   "build": {
     "appId": "io.github.codex-switcher.local",
     "productName": "Codex Switcher Local",
-    "buildVersion": "463",
+    "buildVersion": "464",
     "asar": true,
     "electronFuses": {
       "resetAdHocDarwinSignature": true,
