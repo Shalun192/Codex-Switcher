@@ -1,0 +1,96 @@
+{
+  "name": "codex-switcher-local",
+  "version": "4.6.3",
+  "description": "Local-only Codex account switcher for macOS and Windows",
+  "main": "src/main/main.js",
+  "author": "Codex Switcher",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test tests/*.test.js",
+    "security:check": "node scripts/security-check.mjs",
+    "check": "pnpm test && pnpm run security:check",
+    "prepare:codex": "node scripts/prepare-codex-binaries.mjs",
+    "build:mac": "pnpm run prepare:codex && electron-builder --mac --universal",
+    "build:win": "pnpm run prepare:codex && electron-builder --win zip --x64",
+    "build:win:installer": "pnpm run prepare:codex && electron-builder --win nsis --x64",
+    "build:all": "pnpm run check && pnpm run build:mac && pnpm run build:win"
+  },
+  "devDependencies": {
+    "electron": "43.4.1",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "io.github.codex-switcher.local",
+    "productName": "Codex Switcher Local",
+    "buildVersion": "463",
+    "asar": true,
+    "electronFuses": {
+      "resetAdHocDarwinSignature": true,
+      "runAsNode": false,
+      "enableCookieEncryption": true,
+      "enableNodeOptionsEnvironmentVariable": false,
+      "enableNodeCliInspectArguments": false,
+      "enableEmbeddedAsarIntegrityValidation": true,
+      "onlyLoadAppFromAsar": true,
+      "grantFileProtocolExtraPrivileges": false
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "artifactName": "Codex-Switcher-${version}-${os}-${arch}.${ext}",
+    "mac": {
+      "icon": "build/icon.png",
+      "category": "public.app-category.developer-tools",
+      "minimumSystemVersion": "12.0",
+      "x64ArchFiles": "Contents/Resources/codex/**",
+      "extraResources": [
+        {
+          "from": "vendor/codex/darwin-arm64",
+          "to": "codex/darwin-arm64"
+        },
+        {
+          "from": "vendor/codex/darwin-x64",
+          "to": "codex/darwin-x64"
+        }
+      ],
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["universal"]
+        },
+        {
+          "target": "zip",
+          "arch": ["universal"]
+        }
+      ]
+    },
+    "win": {
+      "icon": "build/icon.png",
+      "extraResources": [
+        {
+          "from": "vendor/codex/win32-x64",
+          "to": "codex/win32-x64"
+        }
+      ],
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Codex Switcher"
+    }
+  }
+}
