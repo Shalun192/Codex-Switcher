@@ -40,13 +40,13 @@ const defaultGuides = new Map();
 const appliedGuideOverrideIds = new Set();
 
 function friendlyError(error) {
-  return String(error?.message || error || 'Неизвестная ошибка')
+  return String(error?.message || error || 'Unknown error')
     .replace(/^Error invoking remote method '[^']+': Error:\s*/, '');
 }
 
 function formatReset(timestamp) {
-  if (!Number.isFinite(timestamp)) return 'дата обновления неизвестна';
-  return `обновится ${new Intl.DateTimeFormat('ru', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(timestamp * 1000))}`;
+  if (!Number.isFinite(timestamp)) return 'reset time unknown';
+  return `resets ${new Intl.DateTimeFormat('en', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(timestamp * 1000))}`;
 }
 
 function selectedProfile() {
@@ -165,8 +165,8 @@ function renderControls() {
   elements.add.disabled = operationBusy;
   elements.autoSwitch.disabled = busy;
   elements.restore.classList.toggle('hidden', !state?.deletedCount);
-  if (selected?.active) elements.connect.textContent = 'Переподключить к Codex';
-  else elements.connect.textContent = 'Подключить к Codex';
+  if (selected?.active) elements.connect.textContent = 'Reconnect to Codex';
+  else elements.connect.textContent = 'Connect to Codex';
 }
 
 function render() {
@@ -189,7 +189,7 @@ function render() {
     email.textContent = profile.email;
     const subline = document.createElement('div');
     subline.className = 'subline';
-    const connection = profile.active ? 'подключён к Codex' : profile.connected ? 'готов к подключению' : 'нужен вход';
+    const connection = profile.active ? 'connected to Codex' : profile.connected ? 'ready to connect' : 'sign-in required';
     subline.textContent = connection;
     identity.append(email, subline);
 
@@ -211,7 +211,7 @@ function render() {
     const plan = document.createElement('span');
     plan.className = 'plan-badge';
     plan.textContent = window.PlanLabel.fromPlanType(profile.metrics?.planType);
-    plan.title = 'Подписка аккаунта';
+    plan.title = 'Account plan';
     percentLine.append(percent, plan);
     const reset = document.createElement('div');
     reset.className = 'reset';
@@ -222,17 +222,17 @@ function render() {
     elements.accounts.append(button);
   }
 
-  elements.device.textContent = 'Локальный режим · данные аккаунтов не отправляются';
+  elements.device.textContent = 'Local mode · account data is not sent anywhere';
   const autoSwitchEnabled = state.settings?.autoSwitchEnabled === true;
   elements.autoSwitch.checked = autoSwitchEnabled;
   elements.autoSwitchRow.classList.toggle('has-error', Boolean(autoSwitchEnabled && state.automation?.lastError));
   elements.autoSwitchNote.textContent = state.automation?.checking
-    ? 'Проверяю лимиты аккаунтов…'
+    ? 'Checking account limits…'
     : autoSwitchEnabled && state.automation?.lastError
       ? state.automation.lastError
       : autoSwitchEnabled
-        ? 'Включено · переключение при 1% · проверка раз в минуту'
-        : 'При 1% подключит следующий аккаунт';
+        ? 'Enabled · switches at 1% · checks once per minute'
+        : 'Connects the next account at 1%';
   elements.version.textContent = `v${state.version} · ${state.platform === 'darwin' ? 'macOS' : 'Windows'}`;
   applyGuideOverrides();
   renderControls();
@@ -248,9 +248,9 @@ async function run(action, message) {
       render();
     }
     if (message && elements.status.textContent === message) {
-      elements.status.textContent = message === 'Запускаю локальное приложение…'
-        ? (state?.profiles.length ? 'Выберите аккаунт.' : 'Добавьте свой аккаунт.')
-        : 'Готово.';
+      elements.status.textContent = message === 'Starting the local application…'
+        ? (state?.profiles.length ? 'Select an account.' : 'Add your account.')
+        : 'Done.';
     }
   } catch (error) {
     elements.status.textContent = friendlyError(error);
@@ -282,8 +282,8 @@ function loadGuideEditor() {
   elements.guideEditorTitle.value = value?.title || '';
   elements.guideEditorContent.value = value?.content || '';
   elements.guideEditorStatus.textContent = override
-    ? `Локальная версия · ${new Date(override.updated_at * 1000).toLocaleString('ru')}`
-    : 'Используется встроенный текст приложения.';
+    ? `Local version · ${new Date(override.updated_at * 1000).toLocaleString('en')}`
+    : 'Using the built-in application text.';
 }
 
 function setGuideEditorBusy(value, message = '') {
@@ -321,26 +321,26 @@ function closeGuideEditor() {
 
 captureDefaultGuides();
 
-elements.add.addEventListener('click', () => run(() => window.switcher.add(), 'Открываю официальный вход Codex…'));
-elements.emptyAdd.addEventListener('click', () => run(() => window.switcher.add(), 'Открываю официальный вход Codex…'));
+elements.add.addEventListener('click', () => run(() => window.switcher.add(), 'Opening the official Codex sign-in…'));
+elements.emptyAdd.addEventListener('click', () => run(() => window.switcher.add(), 'Opening the official Codex sign-in…'));
 elements.connect.addEventListener('click', () => {
   const selected = selectedProfile();
-  if (selected) run(() => window.switcher.connect(selected.id), 'Подключаю аккаунт…');
+  if (selected) run(() => window.switcher.connect(selected.id), 'Connecting the account…');
 });
 elements.refresh.addEventListener('click', () => {
   const selected = selectedProfile();
-  if (selected) run(() => window.switcher.refresh(selected.id), 'Обновляю лимиты…');
+  if (selected) run(() => window.switcher.refresh(selected.id), 'Refreshing limits…');
 });
 elements.remove.addEventListener('click', () => {
   const selected = selectedProfile();
   if (selected) run(() => window.switcher.remove(selected.id));
 });
-elements.restore.addEventListener('click', () => run(() => window.switcher.restore(), 'Восстанавливаю аккаунт…'));
+elements.restore.addEventListener('click', () => run(() => window.switcher.restore(), 'Restoring the account…'));
 elements.autoSwitch.addEventListener('change', () => {
   const enabled = elements.autoSwitch.checked;
   run(
     () => window.switcher.setAutoSwitch(enabled),
-    enabled ? 'Включаю автопереключение…' : 'Выключаю автопереключение…'
+    enabled ? 'Enabling auto-switch…' : 'Disabling auto-switch…'
   );
 });
 elements.helpOpen.addEventListener('click', () => {
@@ -363,39 +363,39 @@ elements.guideEditorSave.addEventListener('click', async () => {
   const title = elements.guideEditorTitle.value.trim();
   const content = elements.guideEditorContent.value.trim();
   if (!title || !content) {
-    elements.guideEditorStatus.textContent = 'Название и текст не должны быть пустыми.';
+    elements.guideEditorStatus.textContent = 'The title and content cannot be empty.';
     return;
   }
   const result = await runGuideEditorAction(
     () => window.switcher.saveGuide(sectionId, title, content),
-    'Сохраняю гайд локально…'
+    'Saving the guide locally…'
   );
   if (result) {
     loadGuideEditor();
-    elements.guideEditorStatus.textContent = 'Гайд сохранён на этом компьютере.';
+    elements.guideEditorStatus.textContent = 'The guide was saved on this computer.';
   }
 });
 elements.guideEditorReset.addEventListener('click', async () => {
   const sectionId = Number(elements.guideEditorSection.value);
-  if (!window.confirm(`Вернуть встроенный текст раздела ${sectionId}? Локальные изменения будут удалены.`)) return;
+  if (!window.confirm(`Restore the built-in text for section ${sectionId}? Local changes will be deleted.`)) return;
   const result = await runGuideEditorAction(
     () => window.switcher.resetGuide(sectionId),
-    'Возвращаю встроенный текст…'
+    'Restoring the built-in text…'
   );
   if (result) {
     loadGuideEditor();
-    elements.guideEditorStatus.textContent = 'Встроенный текст восстановлен локально.';
+    elements.guideEditorStatus.textContent = 'The built-in text was restored locally.';
   }
 });
 elements.helpCopyDiagnostics.addEventListener('click', () => runHelpAction(
   () => window.switcher.copyDiagnostics(),
-  'Копирую безопасную диагностику…',
-  'Диагностика скопирована.'
+  'Copying safe diagnostics…',
+  'Diagnostics copied.'
 ));
 elements.helpOpenChatGPT.addEventListener('click', () => runHelpAction(
   () => window.switcher.openChatGPT(),
-  'Открываю официальный ChatGPT…',
-  'Официальная страница ChatGPT открыта.'
+  'Opening the official ChatGPT page…',
+  'The official ChatGPT page is open.'
 ));
 window.switcher.onStatus((message) => { elements.status.textContent = message; });
 window.switcher.onSnapshot((value) => {
@@ -404,4 +404,4 @@ window.switcher.onSnapshot((value) => {
   render();
 });
 
-run(() => window.switcher.bootstrap(), 'Запускаю локальное приложение…');
+run(() => window.switcher.bootstrap(), 'Starting the local application…');

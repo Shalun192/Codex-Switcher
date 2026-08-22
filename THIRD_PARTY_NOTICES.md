@@ -2,10 +2,10 @@
 
 ## OpenAI Codex
 
-Скрипт сборки загружает официальный пакет `@openai/codex` версии, закреплённой в `scripts/prepare-codex-binaries.mjs`.
+The build script downloads the official `@openai/codex` package version pinned in `scripts/prepare-codex-binaries.mjs`.
 
 - Project: <https://github.com/openai/codex>
 - Package: <https://www.npmjs.com/package/@openai/codex>
 - License: Apache-2.0
 
-Codex не хранится в этом Git-репозитории. Его платформенные пакеты загружаются во время сборки и проверяются по SHA-512 integrity, опубликованному npm registry.
+Codex is not stored in this Git repository. Its platform packages are downloaded during the build and verified against the SHA-512 integrity value published by the npm registry.

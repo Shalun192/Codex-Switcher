@@ -1,24 +1,26 @@
 # Codex Switcher Local 4.6.3
 
-Первый публичный локальный релиз для macOS и Windows.
+The first public local release for macOS and Windows.
 
-Готовые версии можно скачать с постоянно обновляемой [страницы Codex Switcher](https://shalun.online/codex-switcher/). Этот GitHub Release служит открытым архивом файлов, исходников и контрольных сумм.
+Download ready-to-use builds from the continuously updated [Codex Switcher page](https://shalun.online/codex-switcher/). This GitHub Release provides a public mirror of binaries, source, and checksums.
 
-## Главное
+## Highlights
 
-- добавление собственных аккаунтов через официальный браузерный вход OpenAI;
-- ручной выбор и подключение аккаунта к Codex;
-- отображение процентов лимитов, времени обновления и плана Free/Go/Plus/Pro;
-- необязательное автопереключение при остатке 1%;
-- обратимое локальное удаление аккаунтов;
-- встроенные инструкции и локальный редактор гайдов;
-- шифрование сохранённых профилей через Keychain или DPAPI;
-- отсутствие собственного backend, телеметрии и удалённого управления.
+- add your own accounts through the official OpenAI browser sign-in;
+- select and explicitly connect an account to Codex;
+- display limit percentages, reset time, and the Free/Go/Plus/Pro plan;
+- optional automatic switching at 1% remaining;
+- reversible local account removal;
+- built-in instructions with a local guide editor;
+- encrypted saved profiles through Keychain or DPAPI;
+- no custom backend, telemetry, or remote administration.
 
-## Загрузки
+## Downloads
 
-- `Codex-Switcher-4.6.3-mac-universal.dmg` — macOS 12+, Apple Silicon и Intel;
+- `Codex-Switcher-4.6.3-mac-universal.dmg` — macOS 12+, Apple Silicon and Intel;
+- `Codex-Switcher-4.6.3-mac-universal.zip` — macOS application archive;
 - `Codex-Switcher-4.6.3-win-x64.zip` — Windows 10/11 x64;
-- `SHA256SUMS.txt` — контрольные суммы файлов.
+- `Codex-Switcher-4.6.3-source.zip` — prepared source archive;
+- `SHA256SUMS.txt` — file checksums.
 
-Перед установкой прочитайте `INSTALL.md`. Текущие готовые сборки не подписаны коммерческими сертификатами Apple/Windows, поэтому операционная система может показать предупреждение. Не отключайте системную защиту целиком; при максимальных требованиях к доверию соберите приложение из исходников.
+Read `INSTALL.md` before installing. The current ready-to-use builds are not signed with commercial Apple/Windows certificates, so the operating system may display a warning. Do not disable system protection globally; for maximum assurance, build the application from reviewed source.

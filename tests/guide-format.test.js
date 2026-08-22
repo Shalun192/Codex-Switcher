@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const { parseGuide } = require('../src/renderer/guide-format');
 
 test('guide formatting recognizes only the supported safe block syntax', () => {
-  const tokens = parseGuide('# Заголовок\n1. Шаг\n- Пункт\n> Заметка\n! Предупреждение\n<script>alert(1)</script>');
+  const tokens = parseGuide('# Heading\n1. Step\n- Item\n> Note\n! Warning\n<script>alert(1)</script>');
   assert.deepEqual(tokens.map((token) => token.type), [
     'heading', 'ordered', 'unordered', 'note', 'warning', 'paragraph'
   ]);

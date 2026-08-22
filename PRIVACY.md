@@ -1,25 +1,25 @@
 # Privacy
 
-## Что приложение хранит
+## What the app stores
 
-- локальные названия аккаунтов (обычно email, полученный из официальной авторизации);
-- зашифрованные данные авторизации каждого сохранённого профиля;
-- последние известные проценты лимитов, тариф и дату обновления;
-- локальную настройку автопереключения;
-- локальные изменения встроенных гайдов.
+- local account labels, usually the email returned by official authorization;
+- encrypted authorization data for each saved profile;
+- last known limit percentages, plan, and reset time;
+- the local auto-switch setting;
+- local edits to the built-in guides.
 
-## Куда отправляются данные
+## Where data is sent
 
-У Codex Switcher Local нет собственного сервера, телеметрии и аналитики. Приложение не передаёт разработчику список аккаунтов, email, токены, пароли или диагностические данные.
+Codex Switcher Local has no custom server, telemetry, or analytics. It does not send the developer your account list, email addresses, tokens, passwords, or diagnostics.
 
-Официальный процесс Codex соединяется с сервисами OpenAI для входа, обновления авторизации и чтения лимитов. Окно входа открывается только для HTTPS-адресов доменов `openai.com` и `chatgpt.com`.
+The official Codex process connects to OpenAI services for sign-in, authorization refresh, and usage-limit data. The sign-in window opens only HTTPS URLs on `openai.com` and `chatgpt.com` domains.
 
-## Защита на диске
+## Protection at rest
 
-Сохранённые копии авторизации шифруются Electron `safeStorage`, используя Keychain на macOS или DPAPI на Windows. Если защищённое хранилище ОС недоступно, приложение отказывается сохранять новый аккаунт.
+Saved authorization copies are encrypted with Electron `safeStorage`, backed by Keychain on macOS or DPAPI on Windows. If protected operating-system storage is unavailable, the app refuses to save a new account.
 
-Активный Codex использует свой стандартный файл `~/.codex/auth.json`. Switcher создаёт временные файлы авторизации только с закрытыми правами, удаляет их после операции и очищает оставшиеся временные сеансы при следующем запуске.
+Active Codex uses its standard `~/.codex/auth.json` file. The Switcher creates temporary authorization files only with restrictive permissions, removes them after use, and cleans up leftover temporary sessions on the next launch.
 
-## Диагностика
+## Diagnostics
 
-Кнопка копирования диагностики помещает текст только в системный буфер обмена. Он содержит версию приложения, версию ОС и состояние автопереключения, но не содержит email, токены или список аккаунтов. Отправка этого текста кому-либо остаётся решением пользователя.
+The copy-diagnostics button writes text only to the system clipboard. It includes the app version, operating-system version, and auto-switch state, but no email addresses, tokens, or account list. You decide whether to send this text to anyone.

@@ -26,7 +26,7 @@ function resolveCodexBinary(resourcesPath, appPath) {
   const lookup = spawnSync(process.platform === 'win32' ? 'where.exe' : 'which', [process.platform === 'win32' ? 'codex.exe' : 'codex'], { encoding: 'utf8' });
   const found = lookup.status === 0 ? lookup.stdout.trim().split(/\r?\n/)[0] : '';
   if (found) return found;
-  throw new Error('Не найден официальный исполняемый файл Codex. Переустановите приложение или Codex CLI.');
+  throw new Error('The official Codex executable was not found. Reinstall the app or Codex CLI.');
 }
 
 class CodexClient extends EventEmitter {
@@ -56,7 +56,7 @@ class CodexClient extends EventEmitter {
     this.process.stdout.on('data', (chunk) => this.consume(chunk));
     this.process.stderr.on('data', () => {});
     this.process.once('exit', (code) => {
-      const error = new Error(code === 0 ? 'Codex app-server завершён.' : 'Codex app-server завершился с ошибкой.');
+      const error = new Error(code === 0 ? 'The Codex app server stopped.' : 'The Codex app server exited with an error.');
       for (const entry of this.pending.values()) entry.reject(error);
       this.pending.clear();
       this.process = null;
@@ -85,7 +85,7 @@ class CodexClient extends EventEmitter {
         if (!entry) continue;
         clearTimeout(entry.timer);
         this.pending.delete(message.id);
-        if (message.error) entry.reject(new Error(message.error.message || 'Ошибка Codex app-server'));
+        if (message.error) entry.reject(new Error(message.error.message || 'Codex app server error'));
         else entry.resolve(message.result || {});
       } else if (typeof message.method === 'string') {
         this.emit(message.method, message.params || {});
@@ -94,12 +94,12 @@ class CodexClient extends EventEmitter {
   }
 
   request(method, params, timeoutMs = 30000) {
-    if (!this.process || !this.process.stdin.writable) return Promise.reject(new Error('Codex app-server не запущен.'));
+    if (!this.process || !this.process.stdin.writable) return Promise.reject(new Error('The Codex app server is not running.'));
     const id = this.nextId++;
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
         this.pending.delete(id);
-        reject(new Error(`Codex не ответил на ${method}.`));
+        reject(new Error(`Codex did not respond to ${method}.`));
       }, timeoutMs);
       this.pending.set(id, { resolve, reject, timer });
       this.process.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', id, method, params: params || {} })}\n`);
@@ -118,12 +118,12 @@ class CodexClient extends EventEmitter {
     const completedPromise = new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
         cleanup();
-        reject(new Error('Время ожидания входа истекло. Попробуйте снова.'));
+        reject(new Error('The sign-in timed out. Please try again.'));
       }, 10 * 60 * 1000);
       const completed = (params) => {
         cleanup();
         if (params.success) resolve(params);
-        else reject(new Error(params.error || 'Авторизация Codex не завершена.'));
+        else reject(new Error(params.error || 'Codex authorization did not complete.'));
       };
       const exited = (error) => { cleanup(); reject(error); };
       cleanup = () => {
@@ -141,7 +141,7 @@ class CodexClient extends EventEmitter {
         codexStreamlinedLogin: true,
         useHostedLoginSuccessPage: true
       });
-      if (typeof result.authUrl !== 'string') throw new Error('Codex не вернул адрес авторизации.');
+      if (typeof result.authUrl !== 'string') throw new Error('Codex did not return an authorization URL.');
       await openUrl(result.authUrl);
       return await completedPromise;
     } catch (error) {
@@ -173,7 +173,7 @@ class CodexClient extends EventEmitter {
     if (typeof secondary.resetsAt === 'number') metrics.secondaryResetsAt = secondary.resetsAt;
     metrics.planType = rateLimits.planType || account.planType || null;
     if (!Object.keys(metrics).some((key) => key.endsWith('Percent'))) {
-      const reason = rateResult.status === 'rejected' ? rateResult.reason.message : 'Лимиты пока недоступны.';
+      const reason = rateResult.status === 'rejected' ? rateResult.reason.message : 'Usage limits are temporarily unavailable.';
       throw new Error(reason);
     }
     return metrics;

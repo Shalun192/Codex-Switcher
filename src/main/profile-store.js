@@ -124,12 +124,12 @@ class ProfileStore {
 
   requireEncryption() {
     if (!this.safeStorage || !this.safeStorage.isEncryptionAvailable()) {
-      throw new Error('Защищённое хранилище ОС недоступно. Авторизация не была сохранена.');
+      throw new Error('Protected operating-system storage is unavailable. Authorization was not saved.');
     }
   }
 
   writeStoredAuth(id, auth) {
-    if (!validateAuth(auth)) throw new Error('Codex не сохранил корректную авторизацию. Попробуйте войти ещё раз.');
+    if (!validateAuth(auth)) throw new Error('Codex did not save valid authorization data. Please sign in again.');
     this.requireEncryption();
     const ciphertext = this.safeStorage.encryptString(JSON.stringify(auth)).toString('base64');
     atomicWrite(this.encryptedAuthFile(id), Buffer.from(JSON.stringify({ version: 1, ciphertext })));
@@ -175,7 +175,7 @@ class ProfileStore {
   completeProfile(id, suggestedEmail, metrics = null) {
     const home = this.pendingSessions.get(id);
     const auth = home ? readJson(path.join(home, 'auth.json')) : null;
-    if (!validateAuth(auth)) throw new Error('Codex не сохранил корректную авторизацию. Попробуйте войти ещё раз.');
+    if (!validateAuth(auth)) throw new Error('Codex did not save valid authorization data. Please sign in again.');
     const identity = accountIdentity(auth);
     const duplicate = identity && this.state.profiles.find((profile) => this.profileIdentity(profile.id) === identity);
     if (duplicate) {
@@ -191,7 +191,7 @@ class ProfileStore {
     }
     const profile = {
       id,
-      email: emailFromAuth(auth) || suggestedEmail || `Codex аккаунт ${this.state.profiles.length + 1}`,
+      email: emailFromAuth(auth) || suggestedEmail || `Codex account ${this.state.profiles.length + 1}`,
       createdAt: new Date().toISOString(),
       metrics,
       metricsUpdatedAt: metrics ? new Date().toISOString() : null
@@ -217,7 +217,7 @@ class ProfileStore {
 
   openSession(id) {
     const auth = this.readStoredAuth(id);
-    if (!auth) throw new Error('Сначала добавьте аккаунт через официальный вход Codex.');
+    if (!auth) throw new Error('Add an account through the official Codex sign-in first.');
     const home = path.join(this.sessionsDirectory, `session-${crypto.randomUUID()}`);
     ensurePrivateDirectory(home);
     atomicWrite(path.join(home, 'auth.json'), Buffer.from(JSON.stringify(auth)));
@@ -231,7 +231,7 @@ class ProfileStore {
   }
 
   select(id) {
-    if (!this.state.profiles.some((profile) => profile.id === id)) throw new Error('Аккаунт не найден.');
+    if (!this.state.profiles.some((profile) => profile.id === id)) throw new Error('Account not found.');
     this.state.selectedId = id;
     this.save();
   }
@@ -248,7 +248,7 @@ class ProfileStore {
 
   setMetrics(id, metrics) {
     const profile = this.state.profiles.find((item) => item.id === id);
-    if (!profile) throw new Error('Аккаунт не найден.');
+    if (!profile) throw new Error('Account not found.');
     profile.metrics = metrics || null;
     profile.metricsUpdatedAt = new Date().toISOString();
     this.save();
@@ -270,7 +270,7 @@ class ProfileStore {
     const id = crypto.randomUUID();
     const profile = {
       id,
-      email: emailFromAuth(auth) || `Codex аккаунт ${this.state.profiles.length + 1}`,
+      email: emailFromAuth(auth) || `Codex account ${this.state.profiles.length + 1}`,
       createdAt: new Date().toISOString(),
       metrics: null,
       metricsUpdatedAt: null
@@ -334,20 +334,20 @@ class ProfileStore {
 
   activate(id) {
     const profile = this.state.profiles.find((item) => item.id === id);
-    if (!profile) throw new Error('Аккаунт не найден.');
+    if (!profile) throw new Error('Account not found.');
     const auth = this.readStoredAuth(id);
-    if (!auth) throw new Error('Сначала добавьте аккаунт через официальный вход Codex.');
+    if (!auth) throw new Error('Add an account through the official Codex sign-in first.');
     this.captureActiveProfile();
     this.ensurePersonalCredentialStorage();
     atomicWrite(this.globalAuthFile, Buffer.from(JSON.stringify(auth)));
-    if (this.activeIdentity() !== accountIdentity(auth)) throw new Error('Проверка переключения Codex не пройдена.');
+    if (this.activeIdentity() !== accountIdentity(auth)) throw new Error('Codex account-switch verification failed.');
     this.state.selectedId = id;
     this.save();
   }
 
   remove(id) {
     const index = this.state.profiles.findIndex((profile) => profile.id === id);
-    if (index < 0) throw new Error('Аккаунт не найден.');
+    if (index < 0) throw new Error('Account not found.');
     const profile = this.state.profiles[index];
     const archivedName = `${id}-${Date.now()}`;
     const source = this.profileHome(id);
@@ -361,10 +361,10 @@ class ProfileStore {
 
   restoreLast() {
     const archived = this.state.deleted.shift();
-    if (!archived) throw new Error('Нет удалённых аккаунтов для восстановления.');
+    if (!archived) throw new Error('There are no removed accounts to restore.');
     const source = path.join(this.deletedDirectory, archived.archivedName);
     const destination = this.profileHome(archived.id);
-    if (!fs.existsSync(source)) throw new Error('Архив этого аккаунта не найден.');
+    if (!fs.existsSync(source)) throw new Error('The archive for this account was not found.');
     fs.renameSync(source, destination);
     const { archivedName, deletedAt, ...profile } = archived;
     this.state.profiles.push(profile);

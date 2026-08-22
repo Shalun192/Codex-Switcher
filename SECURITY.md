@@ -2,18 +2,18 @@
 
 ## Supported versions
 
-Исправления безопасности выпускаются только для последней версии в основной ветке.
+Security fixes are released only for the latest version on the default branch.
 
-## Как сообщить об уязвимости
+## Reporting a vulnerability
 
-Используйте GitHub Private Vulnerability Reporting в разделе **Security → Advisories → Report a vulnerability**. Не публикуйте рабочий эксплойт или чувствительные данные в обычном Issue.
+Use GitHub Private Vulnerability Reporting under **Security → Advisories → Report a vulnerability**. Do not publish a working exploit or sensitive data in a regular issue.
 
-В отчёте укажите версию, ОС, ожидаемое и фактическое поведение и минимальные шаги воспроизведения. Никогда не прикладывайте `auth.json`, папку данных Switcher, OAuth-токены, API-ключи, QR-коды или коды 2FA.
+Include the app version, operating system, expected and actual behavior, and minimal reproduction steps. Never attach `auth.json`, the Switcher data directory, OAuth tokens, API keys, QR codes, or 2FA codes.
 
-## Что считается уязвимостью
+## What counts as a vulnerability
 
-- раскрытие или незашифрованное постоянное хранение авторизации;
-- обход проверки IPC/навигации и выполнение кода из renderer;
-- небезопасная обработка URL или обновлений;
-- подмена бинарника Codex при штатной сборке;
-- изменение аккаунта до полного закрытия Codex.
+- disclosure or unencrypted persistent storage of authorization data;
+- bypassing IPC/navigation validation or executing code from the renderer;
+- unsafe handling of URLs or updates;
+- substitution of the Codex binary during a standard build;
+- changing the account before Codex has fully closed.
