@@ -15,35 +15,42 @@
           <p id="device">Local mode · account data is not sent anywhere</p>
         </div>
         <div class="header-actions">
-          <button id="help-open" class="icon-button help-button" title="Instructions and help" aria-label="Open instructions">?</button>
-          <button id="add" class="icon-button" title="Add a personal account" aria-label="Add a personal account">+</button>
+          <label class="language-control" data-i18n-title="language.label">
+            <span class="visually-hidden" data-i18n="language.label">Language</span>
+            <select id="language" aria-label="Language" data-i18n-aria-label="language.label">
+              <option value="en">EN</option>
+              <option value="ru">RU</option>
+            </select>
+          </label>
+          <button id="help-open" class="icon-button help-button" title="Instructions and help" aria-label="Open instructions" data-i18n-title="header.helpTitle" data-i18n-aria-label="header.helpAria">?</button>
+          <button id="add" class="icon-button" title="Add a personal account" aria-label="Add a personal account" data-i18n-title="header.addTitle" data-i18n-aria-label="header.addAria">+</button>
         </div>
       </header>
 
       <section id="empty" class="empty hidden">
-        <p>Add your account through the official Codex sign-in.</p>
-        <button id="empty-add" class="secondary">Add account</button>
+        <p data-i18n="empty.message">Add your account through the official Codex sign-in.</p>
+        <button id="empty-add" class="secondary" data-i18n="empty.add">Add account</button>
       </section>
 
-      <section id="accounts" class="accounts" aria-label="Codex accounts"></section>
+      <section id="accounts" class="accounts" aria-label="Codex accounts" data-i18n-aria-label="accounts.aria"></section>
 
       <section id="auto-switch-row" class="auto-switch-row">
         <div class="auto-switch-copy">
-          <div class="auto-switch-title">Auto-switch</div>
+          <div class="auto-switch-title" data-i18n="auto.title">Auto-switch</div>
           <div id="auto-switch-note" class="auto-switch-note">Connects the next account at 1%</div>
         </div>
-        <label class="switch-control" title="Enable or disable auto-switch">
-          <input id="auto-switch" type="checkbox" role="switch" aria-label="Automatic account switching">
+        <label class="switch-control" title="Enable or disable auto-switch" data-i18n-title="auto.titleToggle">
+          <input id="auto-switch" type="checkbox" role="switch" aria-label="Automatic account switching" data-i18n-aria-label="auto.aria">
           <span class="switch-track" aria-hidden="true"></span>
         </label>
       </section>
 
       <section class="actions">
-        <button id="connect" class="primary" disabled>Connect to Codex</button>
+        <button id="connect" class="primary" disabled data-i18n="action.connect">Connect to Codex</button>
         <div class="minor-actions">
-          <button id="refresh" class="link-button" disabled>Refresh limits</button>
-          <button id="remove" class="link-button danger" disabled>Remove</button>
-          <button id="restore" class="link-button hidden">Restore removed</button>
+          <button id="refresh" class="link-button" disabled data-i18n="action.refresh">Refresh limits</button>
+          <button id="remove" class="link-button danger" disabled data-i18n="action.remove">Remove</button>
+          <button id="restore" class="link-button hidden" data-i18n="action.restore">Restore removed</button>
         </div>
       </section>
 
@@ -56,12 +63,12 @@
     <dialog id="help-dialog" class="help-dialog">
       <div class="dialog-head help-head">
         <div>
-          <h2>Instructions</h2>
-          <p>Short answers about using Codex Switcher</p>
+          <h2 data-i18n="help.title">Instructions</h2>
+          <p data-i18n="help.subtitle">Short answers about using Codex Switcher</p>
         </div>
         <div class="help-head-actions">
-          <button id="guide-editor-open" class="link-button">Edit locally</button>
-          <button id="help-close" class="icon-button close-button" aria-label="Close instructions">×</button>
+          <button id="guide-editor-open" class="link-button" data-i18n="help.edit">Edit locally</button>
+          <button id="help-close" class="icon-button close-button" aria-label="Close instructions" data-i18n-aria-label="help.closeAria">×</button>
         </div>
       </div>
 
@@ -216,7 +223,7 @@
           <summary><span>9</span>Support and diagnostics</summary>
           <div class="help-content">
             <p>Diagnostics include only the app version, operating system, and auto-switch state. They do not contain account addresses, passwords, or tokens.</p>
-            <button id="help-copy-diagnostics" class="help-action secondary" data-guide-action>Copy diagnostics</button>
+            <button id="help-copy-diagnostics" class="help-action secondary" data-guide-action data-i18n="help.copyDiagnostics">Copy diagnostics</button>
           </div>
         </details>
 
@@ -240,7 +247,7 @@
               <li>After signing in, confirm that the normal ChatGPT screen opens.</li>
             </ol>
             <p class="help-note">Remember how you registered. If you used Google, Microsoft, or Apple, select the same sign-in method in the future.</p>
-            <button id="help-open-chatgpt" class="help-action secondary" data-guide-action>Open official ChatGPT</button>
+            <button id="help-open-chatgpt" class="help-action secondary" data-guide-action data-i18n="help.openChatGPT">Open official ChatGPT</button>
 
             <h3>Step 3. Open security settings</h3>
             <ol>
@@ -295,13 +302,13 @@
     <dialog id="guide-editor-dialog" class="guide-editor-dialog">
       <div class="dialog-head">
         <div>
-          <h2>Guide editor</h2>
-          <p>Changes are saved only on this computer</p>
+          <h2 data-i18n="editor.title">Guide editor</h2>
+          <p data-i18n="editor.subtitle">Changes are saved only on this computer</p>
         </div>
-        <button id="guide-editor-close" class="icon-button close-button" aria-label="Close editor">×</button>
+        <button id="guide-editor-close" class="icon-button close-button" aria-label="Close editor" data-i18n-aria-label="editor.closeAria">×</button>
       </div>
       <label class="editor-field">
-        <span>Section</span>
+        <span data-i18n="editor.section">Section</span>
         <select id="guide-editor-section">
           <option value="1">1 · Quick start</option>
           <option value="2">2 · How to add an account</option>
@@ -316,28 +323,29 @@
         </select>
       </label>
       <label class="editor-field">
-        <span>Title</span>
+        <span data-i18n="editor.guideTitle">Title</span>
         <input id="guide-editor-title" maxlength="100" autocomplete="off">
       </label>
       <label class="editor-field">
-        <span>Guide content</span>
+        <span data-i18n="editor.content">Guide content</span>
         <textarea id="guide-editor-content" maxlength="30000" spellcheck="false"></textarea>
       </label>
       <div class="editor-format-help">
-        <code># Heading</code><code>1. Step</code><code>- Item</code><code>&gt; Note</code><code>! Warning</code>
+        <code data-i18n="editor.headingSyntax"># Heading</code><code data-i18n="editor.stepSyntax">1. Step</code><code data-i18n="editor.itemSyntax">- Item</code><code data-i18n="editor.noteSyntax">&gt; Note</code><code data-i18n="editor.warningSyntax">! Warning</code>
       </div>
-      <p class="help-warning editor-security-note">Do not paste passwords, OAuth tokens, QR codes, TOTP secrets, or recovery codes here. The editor does not need them, and they would remain in a local file.</p>
+      <p class="help-warning editor-security-note" data-i18n="editor.security">Do not paste passwords, OAuth tokens, QR codes, TOTP secrets, or recovery codes here. The editor does not need them, and they would remain in a local file.</p>
       <p id="guide-editor-status" class="guide-editor-status" aria-live="polite"></p>
       <div class="guide-editor-actions">
-        <button id="guide-editor-reset" class="link-button danger">Restore built-in text</button>
+        <button id="guide-editor-reset" class="link-button danger" data-i18n="editor.restore">Restore built-in text</button>
         <div>
-          <button id="guide-editor-cancel" class="secondary">Cancel</button>
-          <button id="guide-editor-save" class="primary">Save locally</button>
+          <button id="guide-editor-cancel" class="secondary" data-i18n="editor.cancel">Cancel</button>
+          <button id="guide-editor-save" class="primary" data-i18n="editor.save">Save locally</button>
         </div>
       </div>
     </dialog>
     <script src="guide-format.js"></script>
     <script src="plan-label.js"></script>
+    <script src="localization.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
 const { validateAuth, accountIdentity, emailFromAuth } = require('../shared/auth');
+const { normalizeLanguage } = require('./localization');
 
 function readJson(file) {
   try {
@@ -96,13 +97,16 @@ class ProfileStore {
   loadState() {
     const parsed = readJson(this.metadataFile);
     if (!parsed || !Array.isArray(parsed.profiles) || !Array.isArray(parsed.deleted)) {
-      return { profiles: [], deleted: [], selectedId: null, settings: { autoSwitchEnabled: false } };
+      return { profiles: [], deleted: [], selectedId: null, settings: { autoSwitchEnabled: false, language: 'en' } };
     }
     return {
       profiles: parsed.profiles.filter((item) => item && typeof item.id === 'string'),
       deleted: parsed.deleted.filter((item) => item && typeof item.id === 'string'),
       selectedId: typeof parsed.selectedId === 'string' ? parsed.selectedId : null,
-      settings: { autoSwitchEnabled: parsed.settings?.autoSwitchEnabled === true }
+      settings: {
+        autoSwitchEnabled: parsed.settings?.autoSwitchEnabled === true,
+        language: normalizeLanguage(parsed.settings?.language)
+      }
     };
   }
 
@@ -237,11 +241,20 @@ class ProfileStore {
   }
 
   publicSettings() {
-    return { autoSwitchEnabled: this.state.settings.autoSwitchEnabled === true };
+    return {
+      autoSwitchEnabled: this.state.settings.autoSwitchEnabled === true,
+      language: normalizeLanguage(this.state.settings.language)
+    };
   }
 
   setAutoSwitchEnabled(enabled) {
     this.state.settings.autoSwitchEnabled = enabled === true;
+    this.save();
+    return this.publicSettings();
+  }
+
+  setLanguage(language) {
+    this.state.settings.language = normalizeLanguage(language);
     this.save();
     return this.publicSettings();
   }

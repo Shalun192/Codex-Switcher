@@ -10,8 +10,9 @@ Download ready-to-use builds from the continuously updated [Codex Switcher page]
 - select and explicitly connect an account to Codex;
 - display limit percentages, reset time, and the Free/Go/Plus/Pro plan;
 - optional automatic switching at 1% remaining;
+- complete English/Russian interface switch, with English as the default;
 - reversible local account removal;
-- built-in instructions with a local guide editor;
+- ten localized built-in instructions with a local guide editor;
 - encrypted saved profiles through Keychain or DPAPI;
 - no custom backend, telemetry, or remote administration.
 

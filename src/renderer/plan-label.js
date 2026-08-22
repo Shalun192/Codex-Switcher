@@ -12,11 +12,11 @@
     ['chatgptpro', 'Pro']
   ]);
 
-  function fromPlanType(value) {
+  function fromPlanType(value, language = 'en') {
     const normalized = typeof value === 'string'
       ? value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '')
       : '';
-    return labels.get(normalized) || 'Plan —';
+    return labels.get(normalized) || (language === 'ru' ? 'Подписка —' : 'Plan —');
   }
 
   const api = { fromPlanType };

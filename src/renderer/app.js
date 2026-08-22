@@ -9,6 +9,7 @@ const elements = {
   refresh: document.querySelector('#refresh'),
   remove: document.querySelector('#remove'),
   restore: document.querySelector('#restore'),
+  language: document.querySelector('#language'),
   autoSwitch: document.querySelector('#auto-switch'),
   autoSwitchRow: document.querySelector('#auto-switch-row'),
   autoSwitchNote: document.querySelector('#auto-switch-note'),
@@ -39,14 +40,25 @@ let guideEditorBusy = false;
 const defaultGuides = new Map();
 const appliedGuideOverrideIds = new Set();
 
+function currentLanguage() {
+  return window.Localization.normalizeLanguage(state?.settings?.language);
+}
+
+function t(key, variables) {
+  return window.Localization.translate(currentLanguage(), key, variables);
+}
+
 function friendlyError(error) {
-  return String(error?.message || error || 'Unknown error')
+  const message = String(error?.message || error || t('error.unknown'))
     .replace(/^Error invoking remote method '[^']+': Error:\s*/, '');
+  return window.Localization.translateError(currentLanguage(), message);
 }
 
 function formatReset(timestamp) {
-  if (!Number.isFinite(timestamp)) return 'reset time unknown';
-  return `resets ${new Intl.DateTimeFormat('en', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(timestamp * 1000))}`;
+  if (!Number.isFinite(timestamp)) return t('limit.unknown');
+  const locale = currentLanguage() === 'ru' ? 'ru-RU' : 'en';
+  const date = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(timestamp * 1000));
+  return t('limit.resets', { date });
 }
 
 function selectedProfile() {
@@ -137,17 +149,28 @@ function applyGuideOverrides() {
   for (const section of document.querySelectorAll('.help-section[data-guide-id]')) {
     const id = Number(section.dataset.guideId);
     const override = overrides.get(id);
-    if (override) {
-      setGuideTitle(section, override.title);
-      renderGuideSource(section.querySelector('.help-content'), override.content);
-      appliedGuideOverrideIds.add(id);
-    } else if (appliedGuideOverrideIds.has(id)) {
-      const fallback = defaultGuides.get(id);
-      setGuideTitle(section, fallback.title);
-      renderGuideSource(section.querySelector('.help-content'), fallback.content);
-      appliedGuideOverrideIds.delete(id);
-    }
+    const value = override || window.Localization.guide(currentLanguage(), id, defaultGuides);
+    if (!value) continue;
+    setGuideTitle(section, value.title);
+    renderGuideSource(section.querySelector('.help-content'), value.content);
+    if (override) appliedGuideOverrideIds.add(id);
+    else appliedGuideOverrideIds.delete(id);
   }
+}
+
+function updateGuideEditorOptions() {
+  for (const option of elements.guideEditorSection.options) {
+    const id = Number(option.value);
+    const value = window.Localization.guide(currentLanguage(), id, defaultGuides);
+    if (value) option.textContent = `${id} · ${value.title}`;
+  }
+}
+
+function applyLanguage() {
+  const language = currentLanguage();
+  elements.language.value = language;
+  window.Localization.translateDocument(document, language);
+  updateGuideEditorOptions();
 }
 
 function setBusy(value, message) {
@@ -164,12 +187,14 @@ function renderControls() {
   elements.remove.disabled = operationBusy || !selected;
   elements.add.disabled = operationBusy;
   elements.autoSwitch.disabled = busy;
+  elements.language.disabled = busy;
   elements.restore.classList.toggle('hidden', !state?.deletedCount);
-  if (selected?.active) elements.connect.textContent = 'Reconnect to Codex';
-  else elements.connect.textContent = 'Connect to Codex';
+  if (selected?.active) elements.connect.textContent = t('action.reconnect');
+  else elements.connect.textContent = t('action.connect');
 }
 
 function render() {
+  applyLanguage();
   elements.accounts.replaceChildren();
   elements.empty.classList.toggle('hidden', state.profiles.length !== 0);
   elements.accounts.classList.toggle('hidden', state.profiles.length === 0);
@@ -189,7 +214,7 @@ function render() {
     email.textContent = profile.email;
     const subline = document.createElement('div');
     subline.className = 'subline';
-    const connection = profile.active ? 'connected to Codex' : profile.connected ? 'ready to connect' : 'sign-in required';
+    const connection = profile.active ? t('account.active') : profile.connected ? t('account.ready') : t('account.signIn');
     subline.textContent = connection;
     identity.append(email, subline);
 
@@ -210,8 +235,8 @@ function render() {
     }
     const plan = document.createElement('span');
     plan.className = 'plan-badge';
-    plan.textContent = window.PlanLabel.fromPlanType(profile.metrics?.planType);
-    plan.title = 'Account plan';
+    plan.textContent = window.PlanLabel.fromPlanType(profile.metrics?.planType, currentLanguage());
+    plan.title = t('account.planTitle');
     percentLine.append(percent, plan);
     const reset = document.createElement('div');
     reset.className = 'reset';
@@ -222,23 +247,23 @@ function render() {
     elements.accounts.append(button);
   }
 
-  elements.device.textContent = 'Local mode · account data is not sent anywhere';
+  elements.device.textContent = t('device.local');
   const autoSwitchEnabled = state.settings?.autoSwitchEnabled === true;
   elements.autoSwitch.checked = autoSwitchEnabled;
   elements.autoSwitchRow.classList.toggle('has-error', Boolean(autoSwitchEnabled && state.automation?.lastError));
   elements.autoSwitchNote.textContent = state.automation?.checking
-    ? 'Checking account limits…'
+    ? t('auto.checking')
     : autoSwitchEnabled && state.automation?.lastError
       ? state.automation.lastError
       : autoSwitchEnabled
-        ? 'Enabled · switches at 1% · checks once per minute'
-        : 'Connects the next account at 1%';
+        ? t('auto.on')
+        : t('auto.off');
   elements.version.textContent = `v${state.version} · ${state.platform === 'darwin' ? 'macOS' : 'Windows'}`;
   applyGuideOverrides();
   renderControls();
 }
 
-async function run(action, message) {
+async function run(action, message, successMessage = null) {
   if (busy) return;
   setBusy(true, message);
   try {
@@ -248,9 +273,9 @@ async function run(action, message) {
       render();
     }
     if (message && elements.status.textContent === message) {
-      elements.status.textContent = message === 'Starting the local application…'
-        ? (state?.profiles.length ? 'Select an account.' : 'Add your account.')
-        : 'Done.';
+      elements.status.textContent = successMessage || (message === window.Localization.translate('en', 'status.starting')
+        ? (state?.profiles.length ? t('status.select') : t('status.add'))
+        : t('status.done'));
     }
   } catch (error) {
     elements.status.textContent = friendlyError(error);
@@ -274,7 +299,7 @@ async function runHelpAction(action, pendingMessage, successMessage) {
 function selectedGuideForEditor() {
   const id = Number(elements.guideEditorSection.value);
   const override = (state?.guides || []).find((guide) => Number(guide.section_id) === id);
-  return { id, override, value: override || defaultGuides.get(id) };
+  return { id, override, value: override || window.Localization.guide(currentLanguage(), id, defaultGuides) };
 }
 
 function loadGuideEditor() {
@@ -282,8 +307,8 @@ function loadGuideEditor() {
   elements.guideEditorTitle.value = value?.title || '';
   elements.guideEditorContent.value = value?.content || '';
   elements.guideEditorStatus.textContent = override
-    ? `Local version · ${new Date(override.updated_at * 1000).toLocaleString('en')}`
-    : 'Using the built-in application text.';
+    ? t('editor.localVersion', { date: new Date(override.updated_at * 1000).toLocaleString(currentLanguage() === 'ru' ? 'ru-RU' : 'en') })
+    : t('editor.builtin');
 }
 
 function setGuideEditorBusy(value, message = '') {
@@ -321,26 +346,34 @@ function closeGuideEditor() {
 
 captureDefaultGuides();
 
-elements.add.addEventListener('click', () => run(() => window.switcher.add(), 'Opening the official Codex sign-in…'));
-elements.emptyAdd.addEventListener('click', () => run(() => window.switcher.add(), 'Opening the official Codex sign-in…'));
+elements.add.addEventListener('click', () => run(() => window.switcher.add(), t('status.openingSignIn')));
+elements.emptyAdd.addEventListener('click', () => run(() => window.switcher.add(), t('status.openingSignIn')));
 elements.connect.addEventListener('click', () => {
   const selected = selectedProfile();
-  if (selected) run(() => window.switcher.connect(selected.id), 'Connecting the account…');
+  if (selected) run(() => window.switcher.connect(selected.id), t('status.connecting'));
 });
 elements.refresh.addEventListener('click', () => {
   const selected = selectedProfile();
-  if (selected) run(() => window.switcher.refresh(selected.id), 'Refreshing limits…');
+  if (selected) run(() => window.switcher.refresh(selected.id), t('status.refreshing'));
 });
 elements.remove.addEventListener('click', () => {
   const selected = selectedProfile();
   if (selected) run(() => window.switcher.remove(selected.id));
 });
-elements.restore.addEventListener('click', () => run(() => window.switcher.restore(), 'Restoring the account…'));
+elements.restore.addEventListener('click', () => run(() => window.switcher.restore(), t('status.restoring')));
 elements.autoSwitch.addEventListener('change', () => {
   const enabled = elements.autoSwitch.checked;
   run(
     () => window.switcher.setAutoSwitch(enabled),
-    enabled ? 'Enabling auto-switch…' : 'Disabling auto-switch…'
+    enabled ? t('status.enablingAuto') : t('status.disablingAuto')
+  );
+});
+elements.language.addEventListener('change', () => {
+  const language = window.Localization.normalizeLanguage(elements.language.value);
+  run(
+    () => window.switcher.setLanguage(language),
+    window.Localization.translate(language, 'status.languageChanging'),
+    window.Localization.translate(language, 'status.languageChanged')
   );
 });
 elements.helpOpen.addEventListener('click', () => {
@@ -363,39 +396,39 @@ elements.guideEditorSave.addEventListener('click', async () => {
   const title = elements.guideEditorTitle.value.trim();
   const content = elements.guideEditorContent.value.trim();
   if (!title || !content) {
-    elements.guideEditorStatus.textContent = 'The title and content cannot be empty.';
+    elements.guideEditorStatus.textContent = t('editor.required');
     return;
   }
   const result = await runGuideEditorAction(
     () => window.switcher.saveGuide(sectionId, title, content),
-    'Saving the guide locally…'
+    t('editor.saving')
   );
   if (result) {
     loadGuideEditor();
-    elements.guideEditorStatus.textContent = 'The guide was saved on this computer.';
+    elements.guideEditorStatus.textContent = t('editor.saved');
   }
 });
 elements.guideEditorReset.addEventListener('click', async () => {
   const sectionId = Number(elements.guideEditorSection.value);
-  if (!window.confirm(`Restore the built-in text for section ${sectionId}? Local changes will be deleted.`)) return;
+  if (!window.confirm(t('editor.restoreConfirm', { section: sectionId }))) return;
   const result = await runGuideEditorAction(
     () => window.switcher.resetGuide(sectionId),
-    'Restoring the built-in text…'
+    t('editor.restoring')
   );
   if (result) {
     loadGuideEditor();
-    elements.guideEditorStatus.textContent = 'The built-in text was restored locally.';
+    elements.guideEditorStatus.textContent = t('editor.restored');
   }
 });
 elements.helpCopyDiagnostics.addEventListener('click', () => runHelpAction(
   () => window.switcher.copyDiagnostics(),
-  'Copying safe diagnostics…',
-  'Diagnostics copied.'
+  t('help.copyingDiagnostics'),
+  t('help.diagnosticsCopied')
 ));
 elements.helpOpenChatGPT.addEventListener('click', () => runHelpAction(
   () => window.switcher.openChatGPT(),
-  'Opening the official ChatGPT page…',
-  'The official ChatGPT page is open.'
+  t('help.openingChatGPT'),
+  t('help.chatGPTOpened')
 ));
 window.switcher.onStatus((message) => { elements.status.textContent = message; });
 window.switcher.onSnapshot((value) => {
@@ -404,4 +437,4 @@ window.switcher.onSnapshot((value) => {
   render();
 });
 
-run(() => window.switcher.bootstrap(), 'Starting the local application…');
+run(() => window.switcher.bootstrap(), window.Localization.translate('en', 'status.starting'));
