@@ -22,9 +22,25 @@ test('support diagnostics contains useful local data without credentials or acco
   assert.doesNotMatch(result, /example\.com/);
 });
 
+test('support diagnostics follows the selected Russian language', () => {
+  const result = diagnosticsText({
+    appVersion: '4.6.3',
+    build: 463,
+    platform: 'darwin',
+    osVersion: '25.6.0',
+    language: 'ru',
+    autoSwitch: { enabled: false, lastCheckedAt: null, lastError: null }
+  });
+  assert.match(result, /Codex Switcher — диагностика/);
+  assert.match(result, /Версия: 4\.6\.3 \(сборка 463\)/);
+  assert.match(result, /Режим: полностью локальный/);
+  assert.match(result, /Автопереключение: выключено/);
+});
+
 test('help panel is local-only and contains secure guidance', () => {
   const html = fs.readFileSync(path.join(__dirname, '..', 'src', 'renderer', 'index.html'), 'utf8');
   const renderer = fs.readFileSync(path.join(__dirname, '..', 'src', 'renderer', 'app.js'), 'utf8');
+  const localization = fs.readFileSync(path.join(__dirname, '..', 'src', 'renderer', 'localization.js'), 'utf8');
   const main = fs.readFileSync(path.join(__dirname, '..', 'src', 'main', 'main.js'), 'utf8');
   const numberedSections = html.match(/<summary><span>\d+<\/span>/g) || [];
   assert.equal(numberedSections.length, 10);
@@ -40,10 +56,13 @@ test('help panel is local-only and contains secure guidance', () => {
   assert.match(html, /id="guide-editor-open"/);
   assert.match(html, /id="guide-editor-dialog"/);
   assert.match(html, /id="auto-switch"/);
+  assert.match(html, /id="language"/);
+  assert.match(html, /<option value="en">EN<\/option>/);
+  assert.match(html, /<script src="localization\.js"><\/script>/);
   assert.match(html, /Connects the next account at 1%/);
-  assert.match(renderer, /switches at 1%/);
+  assert.match(localization, /switches at 1%/);
   assert.match(renderer, /PlanLabel\.fromPlanType/);
   assert.match(html, /Auto-switch did not run/);
   assert.match(html, /Keychain.*DPAPI/);
-  assert.doesNotMatch(`${html}\n${renderer}\n${main}`, /online access control|admin:|device:refresh/);
+  assert.doesNotMatch(`${html}\n${renderer}\n${localization}\n${main}`, /online access control|admin:|device:refresh/);
 });

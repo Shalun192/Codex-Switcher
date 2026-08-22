@@ -28,6 +28,7 @@ Before installing, read [INSTALL.md](INSTALL.md) and compare the downloaded file
 - **Encrypted saved profiles.** Uses Keychain on macOS and DPAPI on Windows.
 - **Limits at a glance.** Each account shows remaining percentages, plan, and reset time.
 - **Auto-switch at 1%.** The Switcher can find the next account with available capacity, safely close Codex, replace the local authorization, and start Codex again.
+- **English and Russian.** English is the default; one compact selector translates the interface, status messages, diagnostics, menus, and all ten built-in guides.
 - **Reversible removal.** A locally removed profile can be restored.
 - **Auditable code.** Source, threat model, privacy policy, and automated tests are public.
 
@@ -41,7 +42,8 @@ The project's key advantage is its very simple interface combined with local-onl
 - Automatically switch to the next available account at 1%.
 - Safe switch order: close Codex → atomically replace authorization → start Codex again.
 - Reversible local account removal.
-- Ten built-in guides with a local editor.
+- English and Russian interface with English as the default language.
+- Ten fully localized built-in guides with a local editor.
 - One source tree for macOS 12+ and Windows 10/11 x64.
 
 The app supports the personal plans that Codex reports as `Free`, `Go`, `Plus`, or `Pro`. It does not provide a subscription or bypass OpenAI limits; it only helps manage your own local authorizations.

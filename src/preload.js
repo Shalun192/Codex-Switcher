@@ -12,6 +12,7 @@ contextBridge.exposeInMainWorld('switcher', {
   remove: (id) => ipcRenderer.invoke('accounts:remove', id),
   restore: () => ipcRenderer.invoke('accounts:restore'),
   setAutoSwitch: (enabled) => ipcRenderer.invoke('settings:auto-switch', enabled),
+  setLanguage: (language) => ipcRenderer.invoke('settings:language', language),
   saveGuide: (sectionId, title, content) => ipcRenderer.invoke('guides:save', sectionId, title, content),
   resetGuide: (sectionId) => ipcRenderer.invoke('guides:reset', sectionId),
   copyDiagnostics: () => ipcRenderer.invoke('support:copy-diagnostics'),

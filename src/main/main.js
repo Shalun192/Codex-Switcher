@@ -12,6 +12,7 @@ const { runAutoSwitchCycle } = require('./auto-switch');
 const { switchAccountSafely } = require('./account-switch');
 const { diagnosticsText } = require('./support');
 const { applicationMenuTemplate, contextMenuTemplate } = require('./edit-menu');
+const { translate, localizeError } = require('./localization');
 
 const BUILD_NUMBER = 463;
 const AUTO_SWITCH_INTERVAL_MS = 60 * 1000;
@@ -50,6 +51,14 @@ app.setName('Codex Switcher Local');
 
 function sendStatus(message) {
   if (window && !window.isDestroyed()) window.webContents.send('status', message);
+}
+
+function currentLanguage() {
+  return profiles?.publicSettings().language || 'en';
+}
+
+function t(key, variables) {
+  return translate(currentLanguage(), key, variables);
 }
 
 function sendSnapshot() {
@@ -113,8 +122,8 @@ async function activateAndLaunchCodex(id, automatic = false) {
   const profile = profiles.state.profiles.find((item) => item.id === id);
   if (!profile) throw new Error('Account not found.');
   sendStatus(automatic
-    ? `The limit is exhausted. Closing Codex and switching to ${profile.email}…`
-    : 'Closing Codex before switching accounts…');
+    ? t('status.closingAutomatic', { email: profile.email })
+    : t('status.closingManual'));
   const launch = await switchAccountSafely({
     lifecycle: codexLifecycle,
     activate: () => {
@@ -124,9 +133,12 @@ async function activateAndLaunchCodex(id, automatic = false) {
       profiles.activate(id);
     }
   });
+  const reason = localizeError(currentLanguage(), launch.reason);
   sendStatus(automatic
-    ? (launch.restarted ? `Automatically connected ${profile.email}. Codex is running.` : `Automatically connected ${profile.email}. ${launch.reason}`)
-    : (launch.restarted ? 'Account connected. Codex is running.' : launch.reason));
+    ? (launch.restarted
+        ? t('status.automaticConnected', { email: profile.email })
+        : t('status.automaticConnectedReason', { email: profile.email, reason }))
+    : (launch.restarted ? t('status.connected') : reason));
   return launch;
 }
 
@@ -158,7 +170,7 @@ async function addAccount() {
   pendingLoginId = pending.id;
   const binary = resolveCodexBinary(process.resourcesPath, app.getAppPath());
   loginClient = new CodexClient(binary, pending.home);
-  sendStatus('Opening the official Codex sign-in…');
+  sendStatus(t('status.openingSignIn'));
   let completed = false;
   try {
     await loginClient.login(openOpenAIUrl);
@@ -168,7 +180,7 @@ async function addAccount() {
     loginClient = null;
     const profile = profiles.completeProfile(pending.id, account?.email, metrics);
     completed = true;
-    sendStatus('Account added. Select it and click Connect.');
+    sendStatus(t('status.accountAdded'));
     return snapshot();
   } finally {
     loginClient?.stop();
@@ -181,7 +193,7 @@ async function addAccount() {
 async function connectAccount(id) {
   if (!profiles.state.profiles.some((profile) => profile.id === id)) throw new Error('Account not found.');
   profiles.select(id);
-  sendStatus('Checking limits and connecting the account…');
+  sendStatus(t('status.checkingAndConnecting'));
   try { await refreshMetrics(id); } catch {}
   await activateAndLaunchCodex(id, false);
   return snapshot();
@@ -209,20 +221,21 @@ async function autoSwitchTick() {
             return metrics;
           },
           isEnabled: () => profiles.publicSettings().autoSwitchEnabled,
-          onExhausted: () => sendStatus(`${active.email} has exhausted its limit. Looking for the next account…`),
+          onExhausted: () => sendStatus(t('status.limitExhausted', { email: active.email })),
           switchAccount: (id) => activateAndLaunchCodex(id, true)
         });
         if (result.action === 'no-available-account') {
-          autoSwitchRuntime.lastError = 'The limits are exhausted and no other available account was found.';
+          autoSwitchRuntime.lastError = t('status.noAvailableAccount');
           sendStatus(autoSwitchRuntime.lastError);
         }
         if (result.action === 'switched') autoSwitchRuntime.lastSwitchAt = new Date().toISOString();
         return result;
       } catch (error) {
+        const localizedError = localizeError(currentLanguage(), error.message);
         autoSwitchRuntime.lastError = error.autoSwitchStage === 'current-metrics'
-          ? `Could not check the limit for ${active.email}: ${error.message}`
-          : error.message;
-        sendStatus(`Auto-switch: ${error.message}`);
+          ? t('status.limitCheckFailed', { email: active.email, error: localizedError })
+          : localizedError;
+        sendStatus(t('status.autoSwitchError', { error: localizedError }));
         return { action: 'error', error };
       } finally {
         autoSwitchRuntime.lastCheckedAt = new Date().toISOString();
@@ -240,9 +253,13 @@ function trustedSender(event) {
 }
 
 function handle(channel, action) {
-  ipcMain.handle(channel, (event, ...args) => {
-    if (!trustedSender(event)) throw new Error('Request rejected: untrusted source.');
-    return action(...args);
+  ipcMain.handle(channel, async (event, ...args) => {
+    try {
+      if (!trustedSender(event)) throw new Error('Request rejected: untrusted source.');
+      return await action(...args);
+    } catch (error) {
+      throw new Error(localizeError(currentLanguage(), error));
+    }
   });
 }
 
@@ -259,9 +276,9 @@ function registerIPC() {
   handle('accounts:connect', (id) => withAccountOperation(() => connectAccount(id)));
   handle('accounts:refresh', (id) => withAccountOperation(async () => {
     profiles.select(id);
-    sendStatus('Refreshing limits for the selected account…');
+    sendStatus(t('status.refreshing'));
     await refreshMetrics(id);
-    sendStatus('Limits refreshed.');
+    sendStatus(t('status.refreshed'));
     return snapshot();
   }));
   handle('accounts:remove', (id) => withAccountOperation(async () => {
@@ -269,12 +286,12 @@ function registerIPC() {
     if (!profile) throw new Error('Account not found.');
     const result = await dialog.showMessageBox(window, {
       type: 'warning',
-      buttons: ['Cancel', 'Remove account'],
+      buttons: [t('dialog.remove.cancel'), t('dialog.remove.confirm')],
       defaultId: 0,
       cancelId: 0,
-      title: 'Remove account?',
+      title: t('dialog.remove.title'),
       message: profile.email,
-      detail: 'The encrypted profile will be moved to a local archive and remain available for restoration.'
+      detail: t('dialog.remove.detail')
     });
     if (result.response === 1) profiles.remove(id);
     return snapshot();
@@ -283,12 +300,19 @@ function registerIPC() {
   handle('settings:auto-switch', (enabled) => {
     profiles.setAutoSwitchEnabled(enabled === true);
     autoSwitchRuntime.lastError = null;
-    sendStatus(enabled === true
-      ? 'Auto-switch is enabled. The active account will be checked once per minute.'
-      : 'Auto-switch is disabled.');
+    sendStatus(enabled === true ? t('status.autoSwitchEnabled') : t('status.autoSwitchDisabled'));
     const current = snapshot();
     if (enabled === true) setTimeout(() => autoSwitchTick().catch(() => {}), 100);
     return current;
+  });
+  handle('settings:language', (language) => {
+    profiles.setLanguage(language);
+    autoSwitchRuntime.lastError = null;
+    if (process.platform === 'darwin') {
+      Menu.setApplicationMenu(Menu.buildFromTemplate(applicationMenuTemplate(process.platform, currentLanguage())));
+    }
+    sendStatus(t('status.languageChanged'));
+    return snapshot();
   });
   handle('guides:save', (sectionId, title, content) => {
     guides.save(sectionId, title, content);
@@ -306,6 +330,7 @@ function registerIPC() {
       build: BUILD_NUMBER,
       platform: process.platform,
       osVersion: os.release(),
+      language: currentLanguage(),
       autoSwitch: {
         enabled: profiles.publicSettings().autoSwitchEnabled,
         lastCheckedAt: autoSwitchRuntime.lastCheckedAt,
@@ -373,11 +398,11 @@ function createWindow() {
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
   window.webContents.on('will-attach-webview', (event) => event.preventDefault());
   window.webContents.on('context-menu', (_event, params) => {
-    const template = contextMenuTemplate(params);
+    const template = contextMenuTemplate(params, currentLanguage());
     if (template.length > 0) Menu.buildFromTemplate(template).popup({ window });
   });
   window.loadURL(RENDERER_URL).catch((error) => {
-    dialog.showErrorBox('Codex Switcher', `Could not open the local interface: ${error.message}`);
+    dialog.showErrorBox('Codex Switcher', t('dialog.interfaceError', { error: error.message }));
   });
 }
 
@@ -386,10 +411,10 @@ app.whenReady().then(() => {
   session.defaultSession.setPermissionRequestHandler((_webContents, _permission, callback) => callback(false));
   session.defaultSession.setPermissionCheckHandler(() => false);
   session.defaultSession.setSpellCheckerEnabled(false);
-  if (process.platform === 'darwin') Menu.setApplicationMenu(Menu.buildFromTemplate(applicationMenuTemplate(process.platform)));
-  else Menu.setApplicationMenu(null);
   const dataRoot = process.env.CODEX_SWITCHER_DATA_ROOT || app.getPath('userData');
   profiles = new ProfileStore(dataRoot, { safeStorage });
+  if (process.platform === 'darwin') Menu.setApplicationMenu(Menu.buildFromTemplate(applicationMenuTemplate(process.platform, currentLanguage())));
+  else Menu.setApplicationMenu(null);
   guides = new GuideStore(dataRoot);
   codexLifecycle = new CodexLifecycle();
   registerIPC();

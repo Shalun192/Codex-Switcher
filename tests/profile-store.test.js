@@ -104,17 +104,21 @@ test('imports the already active Codex account locally without duplicates', (con
   assert.equal(store.publicProfiles().length, 1);
 });
 
-test('auto-switch preference is local, disabled by default, and survives restart', (context) => {
+test('settings are local, English is the default, and preferences survive restart', (context) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'codex-switcher-settings-test-'));
   context.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const appRoot = path.join(root, 'app');
   const global = path.join(root, 'global', 'auth.json');
   const store = new ProfileStore(appRoot, options(global));
-  assert.deepEqual(store.publicSettings(), { autoSwitchEnabled: false });
+  assert.deepEqual(store.publicSettings(), { autoSwitchEnabled: false, language: 'en' });
   store.setAutoSwitchEnabled(true);
-  assert.deepEqual(new ProfileStore(appRoot, options(global)).publicSettings(), { autoSwitchEnabled: true });
+  assert.deepEqual(new ProfileStore(appRoot, options(global)).publicSettings(), { autoSwitchEnabled: true, language: 'en' });
+  store.setLanguage('ru');
+  assert.deepEqual(new ProfileStore(appRoot, options(global)).publicSettings(), { autoSwitchEnabled: true, language: 'ru' });
+  store.setLanguage('unsupported');
+  assert.deepEqual(new ProfileStore(appRoot, options(global)).publicSettings(), { autoSwitchEnabled: true, language: 'en' });
   store.setAutoSwitchEnabled(false);
-  assert.deepEqual(new ProfileStore(appRoot, options(global)).publicSettings(), { autoSwitchEnabled: false });
+  assert.deepEqual(new ProfileStore(appRoot, options(global)).publicSettings(), { autoSwitchEnabled: false, language: 'en' });
 });
 
 test('refuses to persist a new account when OS encryption is unavailable', (context) => {
