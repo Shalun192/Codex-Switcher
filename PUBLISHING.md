@@ -9,13 +9,24 @@ This folder is divided into two parts:
 
 ## Before every release
 
+Every material update must receive the next version number. Never replace an
+already published asset in place: keep the older release as immutable history
+and publish new filenames under the new version.
+
 ```bash
 pnpm install --frozen-lockfile
 pnpm run check
 pnpm audit --audit-level high
+node scripts/release-manifest.mjs
 ```
 
-After building, calculate SHA-256 digests and attach `SHA256SUMS.txt` to the release. Upload only files from `release-packages/`, never application data directories.
+`release-manifest.mjs` hashes every tracked source file and every file inside
+the unpacked macOS and Windows applications. Review and attach the generated
+`FILE_MANIFEST_<version>.txt` to the release. After preparing the final release
+archives, calculate their SHA-256 digests and attach `SHA256SUMS.txt` too.
+Compare both documents with the copies served by the website and GitHub; a
+matching version number alone is not a sufficient release check. Upload only
+files from `release-packages/`, never application data directories.
 
 After publishing a release, update the ready-to-use files and version number on the [download page](https://shalun.online/codex-switcher/) so the website and GitHub show the same current version.
 
