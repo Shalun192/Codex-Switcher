@@ -64,7 +64,7 @@ class CodexClient extends EventEmitter {
     });
     this.process.once('error', (error) => this.emit('process-error', error));
     await this.request('initialize', {
-      clientInfo: { name: 'codex-switcher-local', title: 'Codex Switcher', version: '4.6.3' },
+      clientInfo: { name: 'codex-switcher-local', title: 'Codex Switcher', version: '4.6.4' },
       capabilities: { experimentalApi: true }
     });
     this.notify('initialized', {});

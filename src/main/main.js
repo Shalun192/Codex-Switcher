@@ -15,7 +15,7 @@ const { applicationMenuTemplate, contextMenuTemplate } = require('./edit-menu');
 const { translate, localizeError } = require('./localization');
 const { resolveDataRoot } = require('./data-root');
 
-const BUILD_NUMBER = 463;
+const BUILD_NUMBER = 464;
 const AUTO_SWITCH_INTERVAL_MS = 60 * 1000;
 const RENDERER_URL = 'app://renderer/index.html';
 const RENDERER_ROOT = path.resolve(__dirname, '..', 'renderer');

@@ -8,13 +8,13 @@ const { diagnosticsText } = require('../src/main/support');
 
 test('support diagnostics contains useful local data without credentials or accounts', () => {
   const result = diagnosticsText({
-    appVersion: '4.6.3',
-    build: 463,
+    appVersion: '4.6.4',
+    build: 464,
     platform: 'win32',
     osVersion: '10.0.19045',
     autoSwitch: { enabled: true, lastCheckedAt: '2026-08-22T12:00:00.000Z', lastError: null }
   });
-  assert.match(result, /4\.6\.3 \(build 463\)/);
+  assert.match(result, /4\.6\.4 \(build 464\)/);
   assert.match(result, /Windows 10\.0\.19045/);
   assert.match(result, /Mode: fully local/);
   assert.match(result, /Auto-switch: enabled/);
@@ -24,15 +24,15 @@ test('support diagnostics contains useful local data without credentials or acco
 
 test('support diagnostics follows the selected Russian language', () => {
   const result = diagnosticsText({
-    appVersion: '4.6.3',
-    build: 463,
+    appVersion: '4.6.4',
+    build: 464,
     platform: 'darwin',
     osVersion: '25.6.0',
     language: 'ru',
     autoSwitch: { enabled: false, lastCheckedAt: null, lastError: null }
   });
   assert.match(result, /Codex Switcher — диагностика/);
-  assert.match(result, /Версия: 4\.6\.3 \(сборка 463\)/);
+  assert.match(result, /Версия: 4\.6\.4 \(сборка 464\)/);
   assert.match(result, /Режим: полностью локальный/);
   assert.match(result, /Автопереключение: выключено/);
 });
