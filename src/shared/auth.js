@@ -48,10 +48,4 @@ function emailFromAuth(auth) {
   return payload && typeof payload.email === 'string' ? payload.email : null;
 }
 
-function accessTokenIsFresh(auth, minimumSeconds = 120) {
-  if (!validateAuth(auth) || auth.auth_mode !== 'chatgpt') return false;
-  const payload = jwtPayload(auth.tokens.access_token);
-  return Boolean(payload && Number.isFinite(payload.exp) && payload.exp - Date.now() / 1000 >= minimumSeconds);
-}
-
-module.exports = { validateAuth, accountIdentity, emailFromAuth, accessTokenIsFresh };
+module.exports = { validateAuth, accountIdentity, emailFromAuth };

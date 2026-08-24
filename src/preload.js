@@ -6,7 +6,6 @@ contextBridge.exposeInMainWorld('switcher', {
   bootstrap: () => ipcRenderer.invoke('bootstrap'),
   select: (id) => ipcRenderer.invoke('accounts:select', id),
   add: () => ipcRenderer.invoke('accounts:add'),
-  cancelLogin: () => ipcRenderer.invoke('accounts:cancel-login'),
   connect: (id) => ipcRenderer.invoke('accounts:connect', id),
   refresh: (id) => ipcRenderer.invoke('accounts:refresh', id),
   remove: (id) => ipcRenderer.invoke('accounts:remove', id),

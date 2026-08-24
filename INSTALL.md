@@ -7,7 +7,7 @@ Ready-to-use macOS and Windows builds are available on the continuously updated 
 ## macOS
 
 1. Open the [ready-to-use download page](https://shalun.online/codex-switcher/) or **Releases** on GitHub.
-2. Download `Codex-Switcher-4.6.5-mac-universal.dmg`.
+2. Download `Codex-Switcher-4.6.6-mac-universal.dmg`.
 3. Compare its SHA-256 digest with `SHA256SUMS.txt` in the same release.
 4. Open the DMG and drag the app to **Applications**.
 5. Start Codex Switcher Local and add an account through the official OpenAI browser sign-in.
@@ -17,7 +17,7 @@ The universal build supports Apple Silicon and Intel. The current test build is 
 ## Windows 10/11 x64
 
 1. Open the [ready-to-use download page](https://shalun.online/codex-switcher/) or **Releases** on GitHub.
-2. Download `Codex-Switcher-4.6.5-win-x64.zip`.
+2. Download `Codex-Switcher-4.6.6-win-x64.zip`.
 3. Compare its SHA-256 digest with `SHA256SUMS.txt` in the same release.
 4. Extract the ZIP into its own folder.
 5. Run `Codex Switcher Local.exe`.

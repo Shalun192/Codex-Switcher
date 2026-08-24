@@ -15,7 +15,7 @@ const { applicationMenuTemplate, contextMenuTemplate } = require('./edit-menu');
 const { translate, localizeError } = require('./localization');
 const { resolveDataRoot } = require('./data-root');
 
-const BUILD_NUMBER = 465;
+const BUILD_NUMBER = 466;
 const AUTO_SWITCH_INTERVAL_MS = 60 * 1000;
 const RENDERER_URL = 'app://renderer/index.html';
 const RENDERER_ROOT = path.resolve(__dirname, '..', 'renderer');
@@ -33,7 +33,6 @@ let profiles = null;
 let guides = null;
 let codexLifecycle = null;
 let loginClient = null;
-let pendingLoginId = null;
 let autoSwitchTimer = null;
 let accountOperationPromise = null;
 const autoSwitchRuntime = {
@@ -168,7 +167,6 @@ async function bootstrap() {
 async function addAccount() {
   if (loginClient) throw new Error('Another account sign-in is already in progress.');
   const pending = profiles.createPendingProfile();
-  pendingLoginId = pending.id;
   const binary = resolveCodexBinary(process.resourcesPath, app.getAppPath());
   loginClient = new CodexClient(binary, pending.home);
   sendStatus(t('status.openingSignIn'));
@@ -187,7 +185,6 @@ async function addAccount() {
     loginClient?.stop();
     loginClient = null;
     if (!completed) profiles.cancelPendingProfile(pending.id);
-    pendingLoginId = null;
   }
 }
 
@@ -268,12 +265,6 @@ function registerIPC() {
   handle('bootstrap', () => bootstrap());
   handle('accounts:select', (id) => { profiles.select(id); return snapshot(); });
   handle('accounts:add', () => withAccountOperation(addAccount));
-  handle('accounts:cancel-login', () => {
-    loginClient?.stop();
-    loginClient = null;
-    if (pendingLoginId) profiles.cancelPendingProfile(pendingLoginId);
-    pendingLoginId = null;
-  });
   handle('accounts:connect', (id) => withAccountOperation(() => connectAccount(id)));
   handle('accounts:refresh', (id) => withAccountOperation(async () => {
     profiles.select(id);
