@@ -30,6 +30,15 @@ files from `release-packages/`, never application data directories.
 
 After publishing a release, update the ready-to-use files and version number on the [download page](https://shalun.online/codex-switcher/) so the website and GitHub show the same current version.
 
+Publish only these four release assets:
+
+- the universal macOS DMG;
+- the Windows x64 ZIP;
+- `SHA256SUMS.txt` for those downloadable files and the manifest;
+- `FILE_MANIFEST_<version>.txt` for tracked source and unpacked app contents.
+
+GitHub already generates source-code archives. The electron-builder macOS ZIP may be kept locally for testing, but it is not a public release asset.
+
 ## Recommended GitHub settings
 
 - The primary repository is public and its default branch is `main`.

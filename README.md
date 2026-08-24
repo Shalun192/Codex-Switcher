@@ -8,11 +8,11 @@ A minimalist open-source desktop app for switching between your own Codex accoun
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Platforms](https://img.shields.io/badge/platforms-macOS%20%7C%20Windows-lightgrey.svg)](INSTALL.md)
 
-## Latest announcement — version 4.6.5
+## Latest announcement — version 4.6.6
 
-Version **4.6.5** is available for macOS and Windows. This maintenance release keeps the public local-only build synchronized with the current desktop version and retains English by default, complete **EN/RU** localization, update-safe local profiles, limit percentages, plan and reset-time labels, and optional automatic switching at 1% remaining.
+Version **4.6.6** is available for macOS and Windows. This maintenance release removes two unreachable internal API paths without changing account sign-in, switching, recovery, limits, guides, or local encryption. It also keeps the documented release state synchronized with the files actually published on GitHub and the website.
 
-Download the current ready-to-use builds from the [official Codex Switcher download page](https://shalun.online/codex-switcher/) or use the mirror in [GitHub Releases](https://github.com/Shalun192/Codex-Switcher/releases/tag/v4.6.5).
+Download the current ready-to-use builds from the [official Codex Switcher download page](https://shalun.online/codex-switcher/) or use the mirror in [GitHub Releases](https://github.com/Shalun192/Codex-Switcher/releases/tag/v4.6.6).
 
 **Do not want to build it yourself?** Download the ready-to-use macOS or Windows version from the [official Codex Switcher download page](https://shalun.online/codex-switcher/). The page is kept up to date whenever a new build is released.
 
@@ -22,10 +22,10 @@ The easiest option is the continuously updated build on the [official website](h
 
 | System | File | Support |
 | --- | --- | --- |
-| macOS | `Codex-Switcher-4.6.5-mac-universal.dmg` | macOS 12+, Apple Silicon and Intel |
-| Windows | `Codex-Switcher-4.6.5-win-x64.zip` | Windows 10/11 x64 |
+| macOS | `Codex-Switcher-4.6.6-mac-universal.dmg` | macOS 12+, Apple Silicon and Intel |
+| Windows | `Codex-Switcher-4.6.6-win-x64.zip` | Windows 10/11 x64 |
 
-Before installing, read [INSTALL.md](INSTALL.md) and compare the downloaded file's SHA-256 digest with `SHA256SUMS.txt` from the release. `FILE_MANIFEST_4.6.5.txt` records the hashes of tracked source files and the files inside both unpacked applications.
+Before installing, read [INSTALL.md](INSTALL.md) and compare the downloaded file's SHA-256 digest with `SHA256SUMS.txt` from the release. `FILE_MANIFEST_4.6.6.txt` records the hashes of tracked source files and the files inside both unpacked applications.
 
 ## Why Codex Switcher Local
 
